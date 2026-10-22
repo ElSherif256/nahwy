@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>نَحْوِيّ - منصة اختبارات النحو والصرف</title>
 
-  <!-- أيقونات التاب والشورت كات من الديسكتوب (logo.jpg) -->
-  <link rel="icon" type="image/png" sizes="32x32" href="logo.jpg" />
-  <link rel="icon" type="image/png" sizes="16x16" href="logo.jpg" />
-  <link rel="apple-touch-icon" sizes="180x180" href="logo.jpg" />
+  <!-- أيقونات التاب والشورت كات لـ GitHub (logo.jpg) -->
+  <link rel="icon" type="image/jpeg" href="./logo.jpg" />
+  <link rel="shortcut icon" type="image/jpeg" href="./logo.jpg" />
+  <link rel="apple-touch-icon" href="./logo.jpg" />
   <meta name="theme-color" content="#1e293b" />
 
   <!-- Tailwind CSS & FontAwesome -->
@@ -28,7 +28,7 @@
       
       <!-- Logo & Title -->
       <div class="flex items-center gap-3">
-        <img src="logo.png" alt="لوجو نَحْوِيّ" class="w-10 h-10 rounded-full border border-amber-400 object-cover shadow-sm" onerror="this.src='https://via.placeholder.com/40?text=نحوي'" />
+        <img src="./logo.jpg" alt="لوجو نَحْوِيّ" class="w-11 h-11 rounded-full border border-amber-400 object-cover shadow-sm bg-slate-800" onerror="this.onerror=null; this.src='https://via.placeholder.com/45?text=نحوي';" />
         <div>
           <h1 class="text-xl font-black text-amber-400 tracking-wide">نَحْوِيّ</h1>
           <p class="text-xs text-slate-400">منصة النحو والصرف التفاعلية</p>
@@ -42,14 +42,14 @@
         </span>
         <button id="roleToggleBtn" onclick="toggleRole()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-4 py-1.5 rounded-lg text-sm transition shadow-md flex items-center gap-2">
           <i class="fa-solid fa-user-gear"></i>
-          <span id="roleLabel">معاينة وضع الطالب</span>
+          <span id="roleLabel">لوحة تحكم المعلم</span>
         </button>
       </div>
 
     </div>
   </header>
 
-  <!-- Sub-Header Banner for mobile authors -->
+  <!-- Sub-Header Banner for Mobile Authors -->
   <div class="sm:hidden bg-slate-800 border-b border-slate-700 text-center py-1 text-xs text-amber-300 font-bold">
     إعداد: كاتو ومصطفى الجوهري
   </div>
@@ -64,12 +64,12 @@
         <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
         <h2 class="text-2xl font-extrabold text-amber-400 mb-2">أهلاً بك في منصة <span class="text-white">نَحْوِيّ</span> 🎓</h2>
         <p class="text-slate-300 text-sm max-w-xl mx-auto mb-4">
-          اختبر مهاراتك في النحو والصرف، واحصل على تقييم فورى مع شرح آلي وتبسيط لكافة نقاط الضعف!
+          اختبر مهاراتك في النحو والصرف، واحصل على تقييم فورى مع شرح وتبسيط لكافة نقاط الضعف!
         </p>
         
         <!-- Registration Form -->
         <div id="studentRegisterForm" class="max-w-md mx-auto flex gap-2">
-          <input type="text" id="studentNameInput" placeholder="أدخل اسمك الثلاثي للبدء..." class="flex-1 bg-slate-900 border border-slate-600 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-amber-400 text-white" />
+          <input type="text" id="studentNameInput" placeholder="أدخل اسمك للبدء..." class="flex-1 bg-slate-900 border border-slate-600 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-amber-400 text-white" />
           <button onclick="registerStudent()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-5 py-2 rounded-xl text-sm transition">
             دخول
           </button>
@@ -142,11 +142,11 @@
         </div>
       </div>
 
-      <!-- Teacher Quizzes Management Table/List -->
+      <!-- Teacher Quizzes Management -->
       <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 space-y-4">
-        <h3 class="font-bold text-white text-md">الاختبارات الحالية</h3>
+        <h3 class="font-bold text-white text-md">الاختبارات الحالية (إدارة وتعديل وحذف)</h3>
         <div id="teacherQuizzesList" class="space-y-3">
-          <!-- Dynamic Teacher Quizzes with Edit/Delete -->
+          <!-- Dynamic Teacher Quizzes -->
         </div>
       </div>
 
@@ -177,11 +177,11 @@
 
   </main>
 
-  <!-- Create / Edit Quiz Modal -->
+  <!-- Create Quiz Modal -->
   <div id="quizModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
     <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-2xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b border-slate-700 pb-3">
-        <h3 id="modalTitle" class="font-bold text-lg text-amber-400">إضافة اختبار جديد</h3>
+        <h3 class="font-bold text-lg text-amber-400">إضافة اختبار جديد</h3>
         <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
 
@@ -194,7 +194,7 @@
         <div>
           <label class="block text-xs font-bold text-slate-300 mb-1">إضافة الأسئلة (نسخ ولصق دفعة واحدة)</label>
           <textarea id="modalPasteArea" rows="6" placeholder="ضع الأسئلة والاختيارات هنا مرة واحدة..." class="w-full bg-slate-900 border border-slate-600 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-amber-400"></textarea>
-          <p class="text-[11px] text-slate-400 mt-1">سيقوم الذكاء الاصطناعي بتنسيق الأسئلة والاختيارات والتلميحات أوتوماتيكياً!</p>
+          <p class="text-[11px] text-slate-400 mt-1">سيقوم النظام بتنسيق الأسئلة والاختيارات والتلميحات تلقائياً!</p>
         </div>
       </div>
 
@@ -210,9 +210,8 @@
     منصة نَحْوِيّ © 2026 - إعداد كاتو ومصطفى الجوهري
   </footer>
 
-  <!-- Application Logic JS -->
+  <!-- Application JS Logic -->
   <script>
-    // State & Storage Initialization
     let isTeacherView = false;
     let currentStudent = localStorage.getItem('nahwy_student_name') || '';
     
@@ -243,7 +242,6 @@
 
     let submissions = JSON.parse(localStorage.getItem('nahwy_submissions')) || [];
 
-    // App Initialization
     window.onload = function() {
       if (currentStudent) {
         document.getElementById('studentNameInput').classList.add('hidden');
@@ -256,7 +254,6 @@
       renderTeacherSubmissions();
     };
 
-    // Role Toggle
     function toggleRole() {
       isTeacherView = !isTeacherView;
       const label = document.getElementById('roleLabel');
@@ -264,17 +261,16 @@
       const teacherSec = document.getElementById('teacherSection');
 
       if (isTeacherView) {
-        label.textContent = "العودة لوضع الطالب";
+        label.textContent = "معاينة وضع الطالب";
         studentSec.classList.add('hidden');
         teacherSec.classList.remove('hidden');
       } else {
-        label.textContent = "معاينة وضع الطالب";
+        label.textContent = "لوحة تحكم المعلم";
         teacherSec.classList.add('hidden');
         studentSec.classList.remove('hidden');
       }
     }
 
-    // Register Student
     function registerStudent() {
       const input = document.getElementById('studentNameInput');
       const name = input.value.trim();
@@ -290,7 +286,6 @@
       badge.classList.remove('hidden');
     }
 
-    // Render Quizzes list
     function renderQuizzes() {
       const container = document.getElementById('quizzesContainer');
       const teacherContainer = document.getElementById('teacherQuizzesList');
@@ -299,7 +294,7 @@
       teacherContainer.innerHTML = '';
 
       quizzes.forEach((quiz) => {
-        // Student Cards
+        // Student Card
         const card = document.createElement('div');
         card.className = "bg-slate-800 border border-slate-700 rounded-xl p-5 space-y-3 hover:border-amber-500/50 transition shadow-md";
         card.innerHTML = `
@@ -311,7 +306,7 @@
         `;
         container.appendChild(card);
 
-        // Teacher List Items with Delete/Edit
+        // Teacher Item
         const tItem = document.createElement('div');
         tItem.className = "bg-slate-900 border border-slate-700 rounded-xl p-4 flex justify-between items-center";
         tItem.innerHTML = `
@@ -329,16 +324,14 @@
       });
     }
 
-    // Delete Quiz Feature (Fixed & Reliable)
     function deleteQuiz(id) {
-      if (confirm('هل أنت تأكد من رغبتك في حذف هذا الاختبار بشكل نهائي؟')) {
+      if (confirm('هل أنت تأكد من رغبتك في حذف هذا الاختبار؟')) {
         quizzes = quizzes.filter(q => q.id !== id);
         localStorage.setItem('nahwy_quizzes', JSON.stringify(quizzes));
         renderQuizzes();
       }
     }
 
-    // Start Student Quiz
     let activeQuizObj = null;
     function startQuiz(id) {
       if (!currentStudent) {
@@ -386,7 +379,6 @@
       document.getElementById('quizArea').classList.add('hidden');
     }
 
-    // Submit Quiz & Evaluate
     function submitQuiz() {
       if (!activeQuizObj) return;
 
@@ -402,7 +394,6 @@
         }
       });
 
-      // Device IP Hash simulation for integrity
       const deviceHash = 'IP-' + Math.floor(100000 + Math.random() * 900000);
 
       const submission = {
@@ -417,7 +408,6 @@
       localStorage.setItem('nahwy_submissions', JSON.stringify(submissions));
       renderTeacherSubmissions();
 
-      // Show Results & Weak Points
       document.getElementById('quizArea').classList.add('hidden');
       const resultArea = document.getElementById('resultArea');
       resultArea.classList.remove('hidden');
@@ -428,7 +418,7 @@
       weakList.innerHTML = '';
 
       if (wrongItems.length === 0) {
-        weakList.innerHTML = '<p class="text-emerald-400 font-bold">ما شاء الله! إجاباتك كاملة وصحيحة 100% 🌟</p>';
+        weakList.innerHTML = '<p class="text-emerald-400 font-bold">إجاباتك صحيحة وممتازة 100%! 🌟</p>';
       } else {
         wrongItems.forEach((item) => {
           const wDiv = document.createElement('div');
@@ -439,7 +429,7 @@
             <p class="text-slate-300 text-xs">الإجابة الصحيحة: <span class="text-emerald-400 font-bold">${item.options[item.correct]}</span></p>
             <p class="text-slate-400 text-xs bg-slate-900/60 p-2 rounded border border-slate-700">شرح القاعدة: ${item.explanation}</p>
             <button onclick="speakExplanation('${item.explanation.replace(/'/g, "\\'")}')" class="text-xs bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 px-3 py-1 rounded-md border border-amber-500/30 font-bold flex items-center gap-1.5">
-              <i class="fa-solid fa-volume-high"></i> استمع إلى شرح المدرس بصوت واضح
+              <i class="fa-solid fa-volume-high"></i> استمع إلى الشرح الصوتي
             </button>
           `;
           weakList.appendChild(wDiv);
@@ -449,7 +439,6 @@
       window.scrollTo({ top: resultArea.offsetTop - 80, behavior: 'smooth' });
     }
 
-    // Text-to-Speech Explanation
     function speakExplanation(text) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
@@ -462,7 +451,6 @@
       }
     }
 
-    // Render Submissions in Teacher Dashboard
     function renderTeacherSubmissions() {
       const tbody = document.getElementById('studentResultsTable');
       tbody.innerHTML = '';
@@ -486,7 +474,6 @@
       });
     }
 
-    // Modal Helpers
     function showCreateModal() {
       document.getElementById('quizModal').classList.remove('hidden');
     }
@@ -494,15 +481,13 @@
       document.getElementById('quizModal').classList.add('hidden');
     }
 
-    // Save Quiz from Paste Area
     function saveQuizFromModal() {
       const title = document.getElementById('modalQuizTitle').value.trim();
       const pasteText = document.getElementById('modalPasteArea').value.trim();
 
       if (!title) return alert('برجاء كتابة عنوان الاختبار!');
-      if (!pasteText) return alert('برجاء كتابة أو نسخ الأسئلة والاختيارات!');
+      if (!pasteText) return alert('برجاء إضافة الأسئلة والاختيارات!');
 
-      // Simple Auto Parser for pasted text
       const newQuiz = {
         id: 'q_' + Date.now(),
         title: title,
@@ -528,10 +513,9 @@
       alert('تم إضافة الاختبار بنجاح!');
     }
 
-    // Copy Student Link
     function copyStudentLink() {
       navigator.clipboard.writeText(window.location.href);
-      alert('تم نسخ رابط الطالب بنجاح! يمكنك إرساله الآن للطلاب للدخول مباشرة.');
+      alert('تم نسخ رابط الطالب بنجاح!');
     }
   </script>
 </body>
