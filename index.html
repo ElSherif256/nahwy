@@ -1,0 +1,439 @@
+<!-- ... existing code ... -->
+  <header class="bg-emerald-950 border-b border-emerald-800 text-white sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Logo & Diacritics -->
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="switchView('student-dashboard')">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 shadow-inner">
+            <i class="fa-solid me-0.5 fa-book-quran text-2xl"></i>
+          </div>
+          <div>
+            <h1 class="text-2xl font-black tracking-tight text-amber-300 font-serif flex items-center gap-1">
+              <span>نَحْوِيّ</span>
+            </h1>
+            <p class="text-xs text-emerald-200/80 font-medium">منصة النحو واللغة العربية التفاعلية</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Authors Badge (Top Right / Header Prominent) -->
+      <div class="hidden sm:flex items-center gap-2 bg-emerald-900/80 border border-emerald-700/60 px-4 py-2 rounded-xl text-amber-200 text-sm font-bold shadow-sm">
+        <i class="fa-solid fa-code text-amber-400 text-xs"></i>
+        <span>إعداد كاتو ومصطفى الجوهري</span>
+      </div>
+
+      <!-- Mode Switcher & Stats -->
+      <div class="flex items-center gap-3">
+        <div class="flex sm:hidden items-center bg-emerald-900/60 px-2.5 py-1 rounded-lg text-amber-200 text-xs border border-emerald-700/40">
+          إعداد كاتو ومصطفى الجوهري
+        </div>
+
+        <button id="roleToggleBtn" onclick="toggleRole()" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-emerald-950 font-black transition-all shadow-md active:scale-95 text-sm">
+          <i class="fa-solid fa-user-gear" id="roleIcon"></i>
+          <span id="roleText">لوحة التحكم (المعلم)</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+<!-- ... existing code ... -->
+        <!-- CREATE/EDIT QUIZ VIEW -->
+        <div id="quiz-builder-view" class="view-section hidden max-w-4xl mx-auto space-y-6">
+          <div class="flex items-center justify-between">
+            <button onclick="switchView('teacher-dashboard')" class="flex items-center gap-2 text-emerald-700 hover:text-emerald-900 font-bold">
+              <i class="fa-solid fa-arrow-right"></i> العودة للوحة التحكم
+            </button>
+            <h2 id="builderTitle" class="text-2xl font-black text-emerald-950">إنشاء اختبار جديد بالأذكاء الاصطناعي</h2>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 border border-emerald-100 shadow-sm space-y-6">
+            <!-- Quiz Meta info -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1">عنوان الاختبار</label>
+                <input type="text" id="quizTitleInput" placeholder="مثال: اختبار الفاعل والمفعول به - الصف الثاني الثانوي" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 outline-none text-sm font-medium">
+              </div>
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1">وصف أو تعليمات الاختبار</label>
+                <input type="text" id="quizDescInput" placeholder="مثال: اجب عن جميع الأسئلة بتركيز، مدة الاختبار 10 دقائق" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 outline-none text-sm font-medium">
+              </div>
+            </div>
+
+            <!-- AI Creation Tabs -->
+            <div class="border-t border-gray-100 pt-6">
+              <div class="flex border-b border-gray-200 mb-6 gap-2">
+                <button id="tabPasteBtn" onclick="switchBuilderTab('paste')" class="pb-3 px-4 font-bold text-sm border-b-2 border-emerald-600 text-emerald-700 flex items-center gap-2">
+                  <i class="fa-solid fa-paste"></i> نسخ ولصق النص المباشر
+                </button>
+                <button id="tabImgBtn" onclick="switchBuilderTab('image')" class="pb-3 px-4 font-bold text-sm text-gray-500 hover:text-emerald-700 flex items-center gap-2">
+                  <i class="fa-solid fa-file-image"></i> رفع صورة الأسئلة (OCR)
+                </button>
+              </div>
+
+              <!-- Paste Mode -->
+              <div id="builderPasteTab" class="space-y-4">
+                <div class="bg-amber-50/80 border border-amber-200 rounded-xl p-4 text-xs text-amber-900 flex gap-3 items-start">
+                  <i class="fa-solid fa-lightbulb text-amber-600 text-lg mt-0.5"></i>
+                  <div>
+                    <strong class="block text-amber-950 font-bold mb-1">طريقة اللصق السريعة:</strong>
+                    انسخ أسئلتك من أي ملف Word أو WhatsApp أو صفحة ويب بكل إجاباتها والخيارات والشرح، والمستخرج الذكي (Gemini AI) هيرتبها تلقائياً لاختبار تفاعلي!
+                  </div>
+                </div>
+
+                <div>
+                  <textarea id="rawQuizContent" rows="8" placeholder="المس النص هنا... مثال:
+1. اعرب كلمة (الطالب) في جملة 'كتب الطالبُ الدرسَ':
+أ) فاعل مرفوع بالضمة
+ب) مفعول به منصوب
+ج) مبتدأ مرفوع
+د) مضاف إليه
+الإجابة الصحيحة: أ
+الشرح: الطالب هو من قام ببل الكتابة فيرفع بالضمة." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 outline-none text-sm font-medium leading-relaxed"></textarea>
+                </div>
+
+                <button onclick="parseTextContentWithAI()" id="parseTextBtn" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow transition flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i> استخراج الأسئلة وتجهيز الاختبار فوراً
+                </button>
+              </div>
+
+              <!-- Image Mode -->
+              <div id="builderImgTab" class="hidden space-y-4">
+                <div class="bg-blue-50/80 border border-blue-200 rounded-xl p-4 text-xs text-blue-900 flex gap-3 items-start">
+                  <i class="fa-solid fa-camera text-blue-600 text-lg mt-0.5"></i>
+                  <div>
+                    <strong class="block text-blue-950 font-bold mb-1">رفع صورة الورقة الامتحانية:</strong>
+                    صوّر ورقة الأسئلة أو اختر صورة من جهازك، وسيتم قراءة الأسئلة والاختيارات وتحويلها لاختبار إلكتروني مباشرة!
+                  </div>
+                </div>
+
+                <div class="border-2 border-dashed border-gray-300 rounded-2xl p-6 text-center hover:border-emerald-500 transition cursor-pointer bg-gray-50/50" onclick="document.getElementById('quizImgInput').click()">
+                  <input type="file" id="quizImgInput" accept="image/*" class="hidden" onchange="previewQuizImage(event)">
+                  <div id="imgPreviewContainer" class="hidden mb-3">
+                    <img id="imgPreview" class="max-h-56 mx-auto rounded-lg border shadow-sm">
+                  </div>
+                  <i class="fa-solid fa-cloud-arrow-up text-4xl text-gray-400 mb-2" id="uploadIcon"></i>
+                  <p class="text-sm font-bold text-gray-700" id="uploadText">اضغط هنا لاختيار صورة الأسئلة</p>
+                  <p class="text-xs text-gray-400 mt-1">يدعم صيغ JPG, PNG, WEBP</p>
+                </div>
+
+                <button onclick="parseImageWithAI()" id="parseImgBtn" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow transition flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-bolt"></i> تحليل الصورة واستخراج الأسئلة بالذكاء الاصطناعي
+                </button>
+              </div>
+            </div>
+
+            <!-- Extracted Questions Preview & Save Area -->
+            <div id="extractedPreviewSection" class="hidden border-t border-gray-200 pt-6 space-y-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-bold text-emerald-900 flex items-center gap-2">
+                  <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                  الأسئلة المستخرجة (<span id="parsedCount">0</span> سؤال)
+                </h3>
+                <span class="text-xs text-gray-500">يمكنك مراجعة وتعديل الأسئلة أدناه قبل الحفظ</span>
+              </div>
+
+              <div id="parsedQuestionsContainer" class="space-y-4 max-h-[450px] overflow-y-auto p-1">
+                <!-- Dynamically populated parsed questions -->
+              </div>
+
+              <button onclick="saveFinalQuiz()" class="w-full py-4 bg-amber-500 hover:bg-amber-400 text-emerald-950 font-black text-base rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-floppy-disk"></i> حفظ ونشر الاختبار للطلاب
+              </button>
+            </div>
+
+          </div>
+        </div>
+<!-- ... existing code ... -->
+<script>
+// ... existing code ...
+
+// Fix Quiz Deletion Logic directly with reliable confirm dialogue and re-render
+function deleteQuiz(quizId) {
+  if (!quizId) return;
+  
+  const targetQuiz = quizzes.find(q => q.id === quizId);
+  const quizTitle = targetQuiz ? targetQuiz.title : "هذا الاختبار";
+
+  if (confirm(`هل أنت تأكد من حذف "${quizTitle}" نهائياً؟ سيتم مسح نتائجه أيضاً.`)) {
+    // Delete from state
+    quizzes = quizzes.filter(q => q.id !== quizId);
+    submissions = submissions.filter(s => s.quizId !== quizId);
+
+    // Save state
+    saveToStorage();
+
+    // Show toast message
+    showNotification('تم حذف الاختبار بنجاح!', 'success');
+
+    // Re-render Teacher Dashboard
+    renderTeacherDashboard();
+  }
+}
+
+// Switch Tab inside Quiz Builder
+let currentBuilderTab = 'paste';
+function switchBuilderTab(tab) {
+  currentBuilderTab = tab;
+  const pasteTab = document.getElementById('builderPasteTab');
+  const imgTab = document.getElementById('builderImgTab');
+  const tabPasteBtn = document.getElementById('tabPasteBtn');
+  const tabImgBtn = document.getElementById('tabImgBtn');
+
+  if (tab === 'paste') {
+    pasteTab.classList.remove('hidden');
+    imgTab.classList.add('hidden');
+    tabPasteBtn.className = 'pb-3 px-4 font-bold text-sm border-b-2 border-emerald-600 text-emerald-700 flex items-center gap-2';
+    tabImgBtn.className = 'pb-3 px-4 font-bold text-sm text-gray-500 hover:text-emerald-700 flex items-center gap-2';
+  } else {
+    pasteTab.classList.add('hidden');
+    imgTab.classList.remove('hidden');
+    tabImgBtn.className = 'pb-3 px-4 font-bold text-sm border-b-2 border-emerald-600 text-emerald-700 flex items-center gap-2';
+    tabPasteBtn.className = 'pb-3 px-4 font-bold text-sm text-gray-500 hover:text-emerald-700 flex items-center gap-2';
+  }
+}
+
+// Image Preview Handler
+let selectedQuizImageBase64 = null;
+function previewQuizImage(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      selectedQuizImageBase64 = e.target.result.split(',')[1];
+      document.getElementById('imgPreview').src = e.target.result;
+      document.getElementById('imgPreviewContainer').classList.remove('hidden');
+      document.getElementById('uploadIcon').classList.add('hidden');
+      document.getElementById('uploadText').innerText = "تم اختيار الصورة (اضغط للتغيير)";
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Parse text content using Gemini API
+async function parseTextContentWithAI() {
+  const textContent = document.getElementById('rawQuizContent').value.trim();
+  if (!textContent) {
+    showNotification('برجاء نسخ النص يحتوي على الأسئلة أولاً', 'error');
+    return;
+  }
+
+  const parseBtn = document.getElementById('parseTextBtn');
+  parseBtn.disabled = true;
+  parseBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري استخراج وترتيب الأسئلة...`;
+
+  const prompt = `أنت معلم متخصص في اللغة العربية والنحو. قم بتحليل النص التالي واستخراج جميع الأسئلة مع الاختيارات المتعددة (4 اختيارات لكل سؤال إذا أمكن)، الإجابة الصحيحة (رقم الفهرس من 0 إلى 3)، وتلميح أو شرح مبسط.
+Return strict JSON structure:
+[
+  {
+    "question": "نص السؤال هنا",
+    "options": ["اختيار 1", "اختيار 2", "اختيار 3", "اختيار 4"],
+    "correctAnswer": 0,
+    "hint": "تلميح ذكي للحل",
+    "explanation": "الشرح النحوي المبسط للإجابة"
+  }
+]
+النص المراد تحليله:
+${textContent}`;
+
+  try {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          responseMimeType: "application/json"
+        }
+      })
+    });
+
+    const data = await response.json();
+    const parsedText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (parsedText) {
+      currentExtractedQuestions = JSON.parse(parsedText);
+      renderParsedQuestions(currentExtractedQuestions);
+      showNotification('تم استخراج الأسئلة بنجاح!', 'success');
+    } else {
+      throw new Error('لم يتم استخراج أسئلة بشكل صحيح');
+    }
+  } catch (err) {
+    console.error(err);
+    showNotification('حدث خطأ أثناء تحليل النص بالذكاء الاصطناعي', 'error');
+  } finally {
+    parseBtn.disabled = false;
+    parseBtn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> استخراج الأسئلة وتجهيز الاختبار فوراً`;
+  }
+}
+
+// Parse Image OCR with Gemini API
+async function parseImageWithAI() {
+  if (!selectedQuizImageBase64) {
+    showNotification('برجاء إرفاق صورة أسئلة أولاً', 'error');
+    return;
+  }
+
+  const parseImgBtn = document.getElementById('parseImgBtn');
+  parseImgBtn.disabled = true;
+  parseImgBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري قراءة وتحليل الصورة بالذكاء الاصطناعي...`;
+
+  const prompt = `أنت خبير في قراءة الأوراق الامتحانية واستخراج الأسئلة لغة عربية ونحو. استخرج كافة الأسئلة والخيارات والإجابات الصحيحة وشرحها إن وجد من هذه الصورة.
+Return strict JSON structure:
+[
+  {
+    "question": "نص السؤال هنا",
+    "options": ["اختيار 1", "اختيار 2", "اختيار 3", "اختيار 4"],
+    "correctAnswer": 0,
+    "hint": "تلميح مبسط للحل",
+    "explanation": "شرح الإجابة النحوية"
+  }
+]`;
+
+  try {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          parts: [
+            { text: prompt },
+            { inlineData: { mimeType: "image/jpeg", data: selectedQuizImageBase64 } }
+          ]
+        }],
+        generationConfig: {
+          responseMimeType: "application/json"
+        }
+      })
+    });
+
+    const data = await response.json();
+    const parsedText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (parsedText) {
+      currentExtractedQuestions = JSON.parse(parsedText);
+      renderParsedQuestions(currentExtractedQuestions);
+      showNotification('تم استخراج الأسئلة من الصورة بنجاح!', 'success');
+    } else {
+      throw new Error('لم يتم قراءة صورة بشكل صحيح');
+    }
+  } catch (err) {
+    console.error(err);
+    showNotification('حدث خطأ في قراءة الصورة بالذكاء الاصطناعي', 'error');
+  } finally {
+    parseImgBtn.disabled = false;
+    parseImgBtn.innerHTML = `<i class="fa-solid fa-bolt"></i> تحليل الصورة واستخراج الأسئلة بالذكاء الاصطناعي`;
+  }
+}
+
+// Global state for Extracted Questions before saving
+let currentExtractedQuestions = [];
+
+function renderParsedQuestions(questions) {
+  const container = document.getElementById('parsedQuestionsContainer');
+  document.getElementById('parsedCount').innerText = questions.length;
+  document.getElementById('extractedPreviewSection').classList.remove('hidden');
+
+  container.innerHTML = questions.map((q, idx) => `
+    <div class="p-4 rounded-xl border border-gray-200 bg-gray-50/70 space-y-3">
+      <div class="flex justify-between items-start">
+        <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-md">سؤال ${idx + 1}</span>
+        <button onclick="removeParsedQuestion(${idx})" class="text-red-500 hover:text-red-700 text-xs font-bold">
+          <i class="fa-solid fa-trash"></i> حذف
+        </button>
+      </div>
+      <div>
+        <input type="text" value="${q.question}" onchange="currentExtractedQuestions[${idx}].question = this.value" class="w-full px-3 py-2 border rounded-lg text-sm font-bold bg-white focus:ring-1 focus:ring-emerald-500">
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        ${q.options.map((opt, oIdx) => `
+          <div class="flex items-center gap-2 bg-white px-2.5 py-1.5 border rounded-lg">
+            <input type="radio" name="parsed_correct_${idx}" ${q.correctAnswer === oIdx ? 'checked' : ''} onchange="currentExtractedQuestions[${idx}].correctAnswer = ${oIdx}" class="text-emerald-600 focus:ring-emerald-500">
+            <input type="text" value="${opt}" onchange="currentExtractedQuestions[${idx}].options[${oIdx}] = this.value" class="w-full text-xs outline-none bg-transparent font-medium">
+          </div>
+        `).join('')}
+      </div>
+      <div class="text-xs text-gray-600 bg-white p-2 rounded-lg border space-y-1">
+        <div><strong>التلميح:</strong> <input type="text" value="${q.hint || ''}" onchange="currentExtractedQuestions[${idx}].hint = this.value" class="w-full text-xs border-b outline-none"></div>
+        <div><strong>الشرح:</strong> <input type="text" value="${q.explanation || ''}" onchange="currentExtractedQuestions[${idx}].explanation = this.value" class="w-full text-xs outline-none"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function removeParsedQuestion(index) {
+  currentExtractedQuestions.splice(index, 1);
+  renderParsedQuestions(currentExtractedQuestions);
+}
+
+function saveFinalQuiz() {
+  const title = document.getElementById('quizTitleInput').value.trim();
+  const description = document.getElementById('quizDescInput').value.trim();
+
+  if (!title) {
+    showNotification('يرجى كتابة عنوان الاختبار أولاً', 'error');
+    return;
+  }
+
+  if (!currentExtractedQuestions || currentExtractedQuestions.length === 0) {
+    showNotification('لا توجد أسئلة لحفظ الاختبار', 'error');
+    return;
+  }
+
+  if (editingQuizId) {
+    // Edit Existing
+    const index = quizzes.findIndex(q => q.id === editingQuizId);
+    if (index !== -1) {
+      quizzes[index].title = title;
+      quizzes[index].description = description || "اختبار تفاعلي";
+      quizzes[index].questions = currentExtractedQuestions;
+    }
+    showNotification('تم تعديل الاختبار بنجاح!', 'success');
+  } else {
+    // Create New
+    const newQuiz = {
+      id: 'quiz_' + Date.now(),
+      title: title,
+      description: description || "اختبار نحو تفاعلي مع الشرح التوضيحي",
+      createdAt: new Date().toISOString(),
+      questions: currentExtractedQuestions
+    };
+    quizzes.push(newQuiz);
+    showNotification('تم حفظ ونشر الاختبار بنجاح!', 'success');
+  }
+
+  saveToStorage();
+  editingQuizId = null;
+  switchView('teacher-dashboard');
+}
+
+// Reset Builder
+function openNewQuizBuilder() {
+  editingQuizId = null;
+  document.getElementById('builderTitle').innerText = "إنشاء اختبار جديد بالذكاء الاصطناعي";
+  document.getElementById('quizTitleInput').value = "";
+  document.getElementById('quizDescInput').value = "";
+  document.getElementById('rawQuizContent').value = "";
+  selectedQuizImageBase64 = null;
+  document.getElementById('imgPreviewContainer').classList.add('hidden');
+  document.getElementById('uploadIcon').classList.remove('hidden');
+  document.getElementById('uploadText').innerText = "اضغط هنا لاختيار صورة الأسئلة";
+  currentExtractedQuestions = [];
+  document.getElementById('extractedPreviewSection').classList.add('hidden');
+  switchView('quiz-builder');
+}
+
+// Edit Existing Quiz
+function editQuiz(quizId) {
+  const quiz = quizzes.find(q => q.id === quizId);
+  if (!quiz) return;
+
+  editingQuizId = quizId;
+  document.getElementById('builderTitle').innerText = "تعديل الاختبار الحالي";
+  document.getElementById('quizTitleInput').value = quiz.title;
+  document.getElementById('quizDescInput').value = quiz.description || "";
+  currentExtractedQuestions = JSON.parse(JSON.stringify(quiz.questions));
+  renderParsedQuestions(currentExtractedQuestions);
+  switchView('quiz-builder');
+}
+
+// ... existing code ...
+</script>
