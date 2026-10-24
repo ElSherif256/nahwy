@@ -1,6 +1,401 @@
-<!-- MAIN JAVASCRIPT APP logic -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة نَحْوِي - لاختبارات النحو والصرف</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Amiri & Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
     <script>
-        /* ================= INITIAL MOCK DATA ================= */
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            navy: '#0F172A',
+                            deepNavy: '#0B1120',
+                            gold: '#D97706',
+                            lightGold: '#F59E0B',
+                            amberSoft: '#FFFBEB',
+                            slateAccent: '#334155',
+                        }
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        amiri: ['Amiri', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .font-quran {
+            font-family: 'Amiri', serif;
+        }
+        .gold-gradient {
+            background: linear-gradient(135deg, #d97706 0%, #f59e0b 50%, #b45309 100%);
+        }
+        .navy-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-200 selection:text-amber-900">
+
+    <!-- Header Navigation -->
+    <header class="bg-brand-navy text-white border-b-4 border-brand-gold sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3 space-x-reverse cursor-pointer" onclick="navigateTo('home')">
+                <div class="w-12 h-12 rounded-xl gold-gradient flex items-center justify-center text-white text-2xl font-bold font-quran shadow-lg overflow-hidden border border-amber-300/30">
+                    <img src="logo.jpg" alt="نَحْوِي" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML='نْ';">
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black tracking-wide font-quran text-amber-400">نَحْوِي</h1>
+                    <p class="text-xs text-slate-300">إعداد: <span class="text-amber-300 font-semibold">كاتو ومصطفى الجوهري</span></p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <button onclick="navigateTo('student-portal')" class="px-3 py-2 sm:px-4 sm:py-2 rounded-lg text-sm font-semibold text-slate-200 hover:text-white hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-graduation-cap ml-1 text-amber-400"></i> القائمة العامة
+                </button>
+                <button onclick="openTeacherAuthModal()" class="px-3 py-2 sm:px-4 sm:py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-sm font-bold shadow-md hover:shadow-lg transition flex items-center">
+                    <i class="fa-solid fa-user-tie ml-1.5"></i> لوحة المعلم
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- PAGE 1: HOME -->
+        <section id="page-home" class="space-y-8">
+            <div class="navy-gradient text-white rounded-2xl p-6 sm:p-10 border border-slate-700 shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="max-w-2xl relative z-10">
+                    <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-full text-xs font-semibold mb-3">
+                        ✨ منصة الاختبارات التفاعلية المتقدمة
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white leading-tight font-quran">
+                        أتقِن علوم النحو والصرف بثقة وسهولة
+                    </h2>
+                    <p class="mt-3 text-slate-300 text-sm sm:text-base leading-relaxed">
+                        مرحباً بك في منصة <strong class="text-amber-400">نَحْوِي</strong>، المصممة خصيصاً لمساعدتك على تقييم مستواك وتطوير مهاراتك الإعرابية والصرفية مع ميزة تلميحات الذكاء الاصطناعي الذكية.
+                    </p>
+                    <div class="mt-6 flex flex-wrap gap-4 items-center">
+                        <div class="bg-slate-800/80 px-4 py-2 rounded-lg border border-slate-700 text-xs text-slate-300">
+                            👨‍🏫 بإشراف: <span class="text-white font-bold">أ. كاتو & أ. مصطفى الجوهري</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative z-10 flex-shrink-0">
+                    <div class="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl gold-gradient p-1.5 shadow-2xl border-2 border-amber-400/40 flex items-center justify-center text-white text-6xl font-bold font-quran">
+                        <img src="logo.jpg" alt="شعار نحوي" class="w-full h-full object-cover rounded-xl shadow-inner" onerror="this.onerror=null; this.parentElement.innerHTML='نَحْوِي';">
+                    </div>
+                </div>
+            </div>
+
+            <div id="student-identity-card" class="bg-white rounded-xl p-5 border border-slate-200 card-shadow flex flex-col md:flex-row justify-between items-md-center gap-4">
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-brand-navy text-xl font-bold">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <span class="text-xs text-slate-500">حساب الطالب النشط:</span>
+                            <span id="display-student-name" class="font-bold text-slate-800 text-base">زائر جديد</span>
+                            <button onclick="promptChangeStudentName()" class="text-xs text-amber-600 hover:underline mr-2"><i class="fa-solid fa-pen"></i> تغيير الاسم</button>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-0.5">
+                            <i class="fa-solid fa-laptop-code ml-1"></i> مُعرِّف الجهاز المربوط: <span id="display-device-id" class="font-mono text-slate-600">---</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="showStudentHistoryModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs sm:text-sm font-semibold transition">
+                        <i class="fa-solid fa-clock-rotate-left ml-1 text-slate-500"></i> سجل درجاتي وأخطائي
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800 font-quran">الاختبارات المتاحة</h3>
+                        <p class="text-xs text-slate-500">اختر الاختبار للبدء فوراً وتحدي قدراتك النحوية والصرفية</p>
+                    </div>
+                    <span id="quiz-count-badge" class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full">
+                        0 اختبارات
+                    </span>
+                </div>
+                <div id="public-quiz-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </div>
+        </section>
+
+        <!-- PAGE 2: QUIZ -->
+        <section id="page-quiz" class="hidden max-w-3xl mx-auto space-y-6">
+            <div class="bg-white rounded-xl p-5 border border-slate-200 card-shadow flex items-center justify-between">
+                <div>
+                    <button onclick="confirmExitQuiz()" class="text-xs text-slate-500 hover:text-slate-800 font-semibold mb-2 block">
+                        <i class="fa-solid fa-arrow-right ml-1"></i> الخروج من الاختبار
+                    </button>
+                    <h2 id="active-quiz-title" class="text-xl font-extrabold text-brand-navy font-quran">عنوان الاختبار</h2>
+                    <p id="active-quiz-desc" class="text-xs text-slate-500 mt-1">وصف الاختبار</p>
+                </div>
+                <div class="text-left">
+                    <span class="text-xs font-semibold text-slate-400 block">السؤال</span>
+                    <span id="quiz-progress-text" class="text-lg font-bold text-amber-600">1 / 5</span>
+                </div>
+            </div>
+            <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+                <div id="quiz-progress-bar" class="gold-gradient h-full w-0 transition-all duration-300"></div>
+            </div>
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 card-shadow space-y-6">
+                <div>
+                    <span class="inline-block px-3 py-1 bg-slate-100 text-slate-600 rounded-md text-xs font-semibold mb-2">
+                        سؤال في <span id="question-category">النحو</span>
+                    </span>
+                    <h3 id="question-text" class="text-lg sm:text-xl font-bold text-slate-800 leading-relaxed font-quran">نص السؤال...</h3>
+                </div>
+                <div class="border-t border-slate-100 pt-4">
+                    <button onclick="toggleAIHint()" class="px-3.5 py-2 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-800 rounded-lg text-xs font-bold transition flex items-center space-x-2 space-x-reverse">
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-600"></i>
+                        <span>💡 طلب تلميح الذكاء الاصطناعي (AI Hint)</span>
+                    </button>
+                    <div id="ai-hint-box" class="hidden mt-3 p-4 bg-amber-50/70 border-r-4 border-amber-500 rounded-lg text-xs text-amber-900 leading-relaxed transition">
+                        <div class="font-bold mb-1 text-amber-800 flex items-center">
+                            <i class="fa-solid fa-robot ml-1.5"></i> تلميح النحوي الذكي:
+                        </div>
+                        <p id="ai-hint-content">نص التلميح...</p>
+                    </div>
+                </div>
+                <div id="options-container" class="space-y-3 pt-2"></div>
+                <div id="feedback-panel" class="hidden p-4 rounded-xl border space-y-2">
+                    <div class="flex items-center font-bold text-sm" id="feedback-status"></div>
+                    <p id="feedback-explanation" class="text-xs leading-relaxed"></p>
+                    <div class="pt-2 flex justify-end">
+                        <button id="next-question-btn" onclick="nextQuestion()" class="px-5 py-2 bg-brand-navy hover:bg-slate-800 text-white text-xs sm:text-sm font-bold rounded-lg shadow transition">
+                            السؤال التالي <i class="fa-solid fa-arrow-left mr-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 3: RESULT -->
+        <section id="page-result" class="hidden max-w-2xl mx-auto space-y-6">
+            <div class="bg-white rounded-2xl p-8 border border-slate-200 card-shadow text-center space-y-6">
+                <div class="w-20 h-20 gold-gradient rounded-full mx-auto flex items-center justify-center text-white text-4xl shadow-xl">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-brand-navy font-quran">أحسنت! أتممت الاختبار بنجاح</h2>
+                    <p class="text-xs text-slate-500 mt-1">تم إضافتها لسجل نتاجاتك المربوط بذاكرة الجهاز</p>
+                </div>
+                <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 grid grid-cols-3 gap-4">
+                    <div>
+                        <span class="text-xs text-slate-500 block">الدرجة النهائية</span>
+                        <span id="result-score" class="text-2xl font-black text-amber-600">0 / 0</span>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-500 block">النسبة المئوية</span>
+                        <span id="result-percentage" class="text-2xl font-black text-brand-navy">0%</span>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-500 block">التقييم</span>
+                        <span id="result-grade" class="text-sm font-bold text-emerald-600 block mt-2">ممتاز</span>
+                    </div>
+                </div>
+                <div class="text-right space-y-3">
+                    <h4 class="font-bold text-slate-800 text-sm border-b pb-2">تفاصيل الإجابات والأخطاء:</h4>
+                    <div id="results-breakdown-list" class="space-y-3 max-h-80 overflow-y-auto custom-scrollbar pl-1"></div>
+                </div>
+                <div class="flex flex-wrap gap-3 justify-center pt-4">
+                    <button onclick="navigateTo('student-portal')" class="px-5 py-2.5 bg-brand-navy hover:bg-slate-800 text-white rounded-lg text-xs sm:text-sm font-bold transition">
+                        <i class="fa-solid fa-house ml-1"></i> العودة للقائمة الرئيسية
+                    </button>
+                    <button onclick="showStudentHistoryModal()" class="px-5 py-2.5 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs sm:text-sm font-bold transition">
+                        <i class="fa-solid fa-chart-line ml-1"></i> عرض كافة درجاتي
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: TEACHER DASHBOARD -->
+        <section id="page-teacher" class="hidden space-y-6">
+            <div class="bg-brand-navy text-white rounded-xl p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-lg border-b-4 border-amber-500">
+                <div>
+                    <span class="px-2.5 py-0.5 bg-amber-500/20 text-amber-300 text-xs rounded border border-amber-500/30 font-semibold">
+                        🔒 لوحة التحكم والإدارة
+                    </span>
+                    <h2 class="text-2xl font-bold font-quran text-amber-400 mt-1">مرحباً بالمعلم: <span id="admin-teacher-name">أستاذ</span></h2>
+                    <p class="text-xs text-slate-300">إدارة الاختبارات، التعديل، الحذف، والاطلاع على نتائج ومحاولات الطلاب</p>
+                </div>
+                <div class="flex items-center space-x-2 space-x-reverse">
+                    <button onclick="openQuizModal()" class="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-900 rounded-lg text-xs sm:text-sm font-bold shadow transition flex items-center">
+                        <i class="fa-solid fa-plus-circle ml-1.5"></i> إنشاء اختبار جديد
+                    </button>
+                    <button onclick="logoutTeacher()" class="px-3 py-2.5 bg-slate-800 hover:bg-red-900/50 text-slate-300 hover:text-red-300 rounded-lg text-xs font-semibold transition">
+                        <i class="fa-solid fa-right-from-bracket ml-1"></i> خروج
+                    </button>
+                </div>
+            </div>
+            <div class="flex border-b border-slate-200 bg-white rounded-t-xl px-4 pt-2">
+                <button id="tab-btn-quizzes" onclick="switchTeacherTab('quizzes')" class="px-4 py-3 font-bold text-xs sm:text-sm border-b-2 border-amber-500 text-amber-600 flex items-center">
+                    <i class="fa-solid fa-book-bookmark ml-2"></i> إدارة الاختبارات (<span id="teacher-quiz-count">0</span>)
+                </button>
+                <button id="tab-btn-students" onclick="switchTeacherTab('students')" class="px-4 py-3 font-bold text-xs sm:text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center">
+                    <i class="fa-solid fa-users ml-2"></i> سجل أداء الطلاب (<span id="teacher-student-count">0</span>)
+                </button>
+            </div>
+            <div id="teacher-tab-quizzes" class="space-y-4">
+                <div id="teacher-quizzes-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </div>
+            <div id="teacher-tab-students" class="hidden bg-white rounded-xl border border-slate-200 card-shadow overflow-hidden">
+                <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-800 text-sm">سجل المحاولات المكتملة للطلاب</h3>
+                    <button onclick="clearAllStudentRecords()" class="text-xs text-red-600 hover:text-red-800 font-semibold">
+                        <i class="fa-solid fa-trash ml-1"></i> مسح كافة السجلات
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right text-xs sm:text-sm">
+                        <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                            <tr>
+                                <th class="p-3">اسم الطالب</th>
+                                <th class="p-3">الاختبار</th>
+                                <th class="p-3">الدرجة</th>
+                                <th class="p-3">معرف الجهاز</th>
+                                <th class="p-3">التاريخ</th>
+                                <th class="p-3">الأخطاء</th>
+                            </tr>
+                        </thead>
+                        <tbody id="student-results-tbody" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-navy text-slate-400 text-xs py-6 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p class="font-quran text-base text-amber-400">منصة نَحْوِي لاختبارات النحو والصرف</p>
+            <p>جميع الحقوق محفوظة © <span id="current-year"></span> | إعداد وتطوير: <strong class="text-slate-200">كاتو ومصطفى الجوهري</strong></p>
+        </div>
+    </footer>
+
+    <!-- MODALS -->
+    <div id="modal-teacher-auth" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 card-shadow border border-slate-100 space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="font-extrabold text-brand-navy text-lg flex items-center">
+                    <i class="fa-solid fa-lock text-amber-500 ml-2"></i> دخول لوحة المعلم / Admin
+                </h3>
+                <button onclick="closeModal('modal-teacher-auth')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleTeacherLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">اسم المعلم</label>
+                    <input type="text" id="auth-teacher-name" required placeholder="أدخل اسمك المعلم..." class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">رمز المرور الخاص (Passcode)</label>
+                    <input type="password" id="auth-passcode" required placeholder="أدخل رمز المرور (000)" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+                    <p class="text-[11px] text-slate-400 mt-1">رمز الدخول الافتراضي هو: <code class="bg-slate-100 px-1 font-bold text-amber-700">000</code></p>
+                </div>
+                <button type="submit" class="w-full py-2.5 gold-gradient text-white rounded-lg font-bold text-sm shadow hover:opacity-95 transition">
+                    تسجيل الدخول
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-quiz-editor" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-3xl w-full p-6 card-shadow border border-slate-100 space-y-5 my-8 max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 id="quiz-editor-modal-title" class="font-extrabold text-brand-navy text-lg">إنشاء اختبار جديد</h3>
+                <button onclick="closeModal('modal-quiz-editor')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-4 overflow-y-auto custom-scrollbar flex-grow pl-1 pr-1">
+                <input type="hidden" id="editor-quiz-id">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">عنوان الاختبار</label>
+                        <input type="text" id="editor-quiz-title" placeholder="مثال: اختبار الفاعل" class="w-full px-3 py-2 border rounded-lg text-xs sm:text-sm outline-none focus:ring-2 focus:ring-amber-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">التصنيف الرئيسي</label>
+                        <select id="editor-quiz-category" class="w-full px-3 py-2 border rounded-lg text-xs sm:text-sm outline-none focus:ring-2 focus:ring-amber-500">
+                            <option value="النحو">النحو</option>
+                            <option value="الصرف">الصرف</option>
+                            <option value="شامل نحو وصرف">شامل نحو وصرف</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">وصف مقتضب للاختبار</label>
+                    <input type="text" id="editor-quiz-desc" placeholder="وصف الاختبار..." class="w-full px-3 py-2 border rounded-lg text-xs sm:text-sm outline-none focus:ring-2 focus:ring-amber-500">
+                </div>
+                <div class="border-t pt-4 flex justify-between items-center">
+                    <h4 class="font-bold text-slate-800 text-sm">أسئلة الاختبار</h4>
+                    <button type="button" onclick="addQuestionEditorBlock()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition">
+                        <i class="fa-solid fa-plus ml-1"></i> إضافة سؤال جديد
+                    </button>
+                </div>
+                <div id="editor-questions-container" class="space-y-6"></div>
+            </div>
+            <div class="border-t pt-3 flex justify-end space-x-2 space-x-reverse">
+                <button onclick="closeModal('modal-quiz-editor')" class="px-4 py-2 bg-slate-100 text-slate-600 rounded-lg text-xs font-semibold">إلغاء</button>
+                <button onclick="saveQuizFromEditor()" class="px-5 py-2 gold-gradient text-white rounded-lg text-xs font-bold shadow">حفظ الاختبار</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-student-history" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 card-shadow border border-slate-100 space-y-4 max-h-[85vh] flex flex-col">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="font-extrabold text-brand-navy text-lg flex items-center">
+                    <i class="fa-solid fa-clock-rotate-left text-amber-500 ml-2"></i> سجل درجات الطالب والأخطاء
+                </h3>
+                <button onclick="closeModal('modal-student-history')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div id="student-history-content" class="overflow-y-auto custom-scrollbar flex-grow space-y-4"></div>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-5 left-5 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl z-50 text-xs font-semibold hidden flex items-center space-x-2 space-x-reverse border border-slate-700">
+        <i id="toast-icon" class="fa-solid fa-circle-info text-amber-400"></i>
+        <span id="toast-message">رسالة التنبيه</span>
+    </div>
+
+    <!-- MAIN JAVASCRIPT APP LOGIC (آمن ومعالج للأخطاء تماماً) -->
+    <script>
         const DEFAULT_QUIZZES = [
             {
                 id: "quiz-nahw-1",
@@ -21,36 +416,11 @@
                             { text: "حال منصوبة", isCorrect: false },
                             { text: "تمييز منصوب", isCorrect: false }
                         ]
-                    },
-                    {
-                        id: "q2",
-                        questionText: "حضر الطلابُ إلا طالبًا. نوع أسلوب الاستثناء وحكم المستثنى هنا:",
-                        aiHint: "الجملة مثبتة (غير منفية) والمستثنى منه (الطلاب) مذكور في الكلام.",
-                        explanation: "الأسلوب تام مثبت، وبالتالي يجب نصب المستثنى (طالبًا).",
-                        options: [
-                            { text: "تام مثبت - واجب النصب", isCorrect: true },
-                            { text: "تام منفي - جائز النصب أو البدلية", isCorrect: false },
-                            { text: "ناقص منفي - يعرب حسب موقعه", isCorrect: false },
-                            { text: "منقطع - مبني على الضم", isCorrect: false }
-                        ]
-                    },
-                    {
-                        id: "q3",
-                        questionText: "إنّ المعلمين المخلصين مَأْجُورُونَ. عند وضع (عَسى) مكان (إنّ) تكون الجملة الصحيحة:",
-                        aiHint: "(عسى) من أفعال الرجاء تعمل عمل (كان) وترفع المبتدأ، وخبرها يغلب أن يكون مقترناً بـ (أن) والفعل المضارع.",
-                        explanation: "(عسى) ترفع الاسم (المعلمون) وخبرها يكون جملة فعلية مع أقترانه بأن (أن يوجَروا).",
-                        options: [
-                            { text: "عسى المعلمين المخلصين أن يُؤجَروا", isCorrect: false },
-                            { text: "عسى المعلمون المخلصون أن يُؤجَروا", isCorrect: true },
-                            { text: "عسى المعلمون المخلصين مأجورين", isCorrect: false },
-                            { text: "عسى المعلمين المخلصون مأجورون", isCorrect: false }
-                        ]
                     }
                 ]
             }
         ];
 
-        /* ================= APP STATE ================= */
         let quizzes = [];
         let studentResults = [];
         let currentStudent = { name: "زائر جديد", deviceId: "" };
@@ -129,12 +499,12 @@
             localStorage.setItem('nahwi_student_results', JSON.stringify(studentResults));
         }
 
-        // ================= URL SHARE EXAM LOGIC =================
+        // فحص آمن ومضبوط للرابط المشفر بدون تعطل الصفحة
         function checkUrlForSharedExam() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const encodedExam = urlParams.get('examData');
-            if (encodedExam) {
-                try {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const encodedExam = urlParams.get('examData');
+                if (encodedExam) {
                     const jsonString = decodeURIComponent(atob(encodedExam));
                     const sharedQuiz = JSON.parse(jsonString);
                     
@@ -148,10 +518,9 @@
                             startQuiz(sharedQuiz.id);
                         }, 300);
                     }
-                } catch (err) {
-                    console.error("خطأ في قراءة رابط الاختبار:", err);
-                    showToast("عذراً، رابط الاختبار التالف أو غير صالح", "error");
                 }
+            } catch (err) {
+                console.error("خطأ آمن في قراءة الرابط:", err);
             }
         }
 
@@ -164,7 +533,6 @@
                 const baseUrl = window.location.origin + window.location.pathname;
                 return `${baseUrl}?examData=${encodedData}`;
             } catch (err) {
-                console.error("فشل توليد الرابط:", err);
                 return "";
             }
         }
@@ -406,7 +774,6 @@
 
             studentResults.unshift(resultRecord);
             saveAppData();
-
             navigateTo('result');
         }
 
@@ -419,7 +786,6 @@
         function showStudentHistoryModal() {
             const modal = document.getElementById('modal-student-history');
             const content = document.getElementById('student-history-content');
-            
             const myRecords = studentResults.filter(r => r.deviceId === currentStudent.deviceId);
 
             if (content) {
@@ -443,7 +809,6 @@
             if (modal) modal.classList.remove('hidden');
         }
 
-        // ================= TEACHER / ADMIN DASHBOARD LOGIC =================
         function openTeacherAuthModal() {
             if (teacherSession) {
                 navigateTo('teacher');
@@ -525,8 +890,6 @@
                             <h4 class="font-bold text-brand-navy text-sm font-quran">${quiz.title}</h4>
                             <p class="text-xs text-slate-500 truncate">${quiz.description || 'بلا وصف'}</p>
                         </div>
-                        
-                        <!-- Share Link Box -->
                         <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200 space-y-1">
                             <span class="text-[10px] font-bold text-slate-600 block"><i class="fa-solid fa-link text-amber-600 ml-1"></i> رابط الطالب المباشر:</span>
                             <div class="flex items-center gap-1">
@@ -536,7 +899,6 @@
                                 </button>
                             </div>
                         </div>
-
                         <div class="pt-2 border-t flex justify-between items-center">
                             <button onclick="openQuizModal('${quiz.id}')" class="text-xs text-amber-600 hover:underline font-bold"><i class="fa-solid fa-pen-to-square ml-1"></i> تعديل</button>
                             <button onclick="deleteQuiz('${quiz.id}')" class="text-xs text-red-600 hover:underline font-bold"><i class="fa-solid fa-trash ml-1"></i> حذف</button>
@@ -553,7 +915,6 @@
                 tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">لا توجد محاولات مسجلة للطلاب حتى الآن.</td></tr>`;
                 return;
             }
-
             tbody.innerHTML = studentResults.map(rec => `
                 <tr class="hover:bg-slate-50">
                     <td class="p-3 font-bold text-slate-800">${rec.studentName}</td>
@@ -642,7 +1003,7 @@
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-700 mb-1">شرح الإجابة الصحيحة / الإعراب</label>
-                        <input type="text" class="q-exp-input w-full px-3 py-1.5 border rounded text-xs outline-none" placeholder="شرح تفصيلي للإجابة..." value="${qExp || ""}">
+                        <input type="text" class="q-exp-input w-full px-3 py-1.5 border rounded text-xs outline-none" placeholder="شرح تفصيلي..." value="${qExp || ""}">
                     </div>
                 </div>
                 <div class="space-y-2 pt-1">
@@ -685,7 +1046,7 @@
                 const qExp = block.querySelector('.q-exp-input').value.trim();
 
                 if (!qText) {
-                    alert(`السؤال رقم (${i+1}) فارغ، يجيب كتابة نصه.`);
+                    alert(`السؤال رقم (${i+1}) فارغ، يجب كتابة نصه.`);
                     return;
                 }
 
@@ -796,3 +1157,5 @@
             }, 3500);
         }
     </script>
+</body>
+</html>
