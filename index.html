@@ -326,8 +326,8 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">رمز المرور الخاص (Passcode)</label>
-                    <input type="password" id="auth-passcode" required placeholder="أدخل رمز المرور (000)" class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
-                    <p class="text-[11px] text-slate-400 mt-1">رمز الدخول الافتراضي هو: <code class="bg-slate-100 px-1 font-bold text-amber-700">000</code></p>
+                    <!-- تم تعديل النوع إلى password وإخفاء أي تلميح للباسورد -->
+                    <input type="password" id="auth-passcode" required placeholder="أدخل رمز المرور..." class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
                 </div>
                 <button type="submit" class="w-full py-2.5 gold-gradient text-white rounded-lg font-bold text-sm shadow hover:opacity-95 transition">
                     تسجيل الدخول
@@ -394,7 +394,7 @@
         <span id="toast-message">رسالة التنبيه</span>
     </div>
 
-    <!-- MAIN JAVASCRIPT APP LOGIC (آمن ومعالج للأخطاء تماماً) -->
+    <!-- MAIN JAVASCRIPT APP LOGIC -->
     <script>
         const DEFAULT_QUIZZES = [
             {
@@ -499,7 +499,6 @@
             localStorage.setItem('nahwi_student_results', JSON.stringify(studentResults));
         }
 
-        // فحص آمن ومضبوط للرابط المشفر بدون تعطل الصفحة
         function checkUrlForSharedExam() {
             try {
                 const urlParams = new URLSearchParams(window.location.search);
@@ -524,14 +523,16 @@
             }
         }
 
+        // توليد الرابط النظيف للموقع الأساسي بدون روابط فيرسيل الداخلية
         function generateShareableLink(quizId) {
             const quiz = quizzes.find(q => q.id === quizId);
             if (!quiz) return "";
             try {
                 const jsonString = JSON.stringify(quiz);
                 const encodedData = btoa(encodeURIComponent(jsonString));
-                const baseUrl = window.location.origin + window.location.pathname;
-                return `${baseUrl}?examData=${encodedData}`;
+                // استخدام الرابط الأساسي للموقع المباشر بدون أي مسارات لوحة تحكم
+                const cleanOrigin = window.location.origin + window.location.pathname;
+                return `${cleanOrigin}?examData=${encodedData}`;
             } catch (err) {
                 return "";
             }
@@ -814,7 +815,12 @@
                 navigateTo('teacher');
             } else {
                 const modal = document.getElementById('modal-teacher-auth');
-                if (modal) modal.classList.remove('hidden');
+                if (modal) {
+                    // تفريغ حقل الباسورد عند الفتح لضمان الأمان
+                    const passEl = document.getElementById('auth-passcode');
+                    if (passEl) passEl.value = "";
+                    modal.classList.remove('hidden');
+                }
             }
         }
 
@@ -834,7 +840,7 @@
                 navigateTo('teacher');
                 showToast("مرحباً بك في لوحة تحكم المعلم", "success");
             } else {
-                showToast("رمز المرور غير صحيح! (الرمز الافتراضي: 000)", "error");
+                showToast("رمز المرور غير صحيح!", "error");
             }
         }
 
@@ -1151,9 +1157,11 @@
                 icon.className = "fa-solid fa-circle-info text-amber-400";
             }
 
+            toast.classList.add('flex');
             toast.classList.remove('hidden');
             setTimeout(() => {
                 toast.classList.add('hidden');
+                toast.classList.remove('flex');
             }, 3500);
         }
     </script>
