@@ -208,4 +208,1068 @@
         </section>
 
         <!-- PAGE 3: RESULT -->
-        <section id="page-result"
+        <section id="page-result" class="hidden max-w-2xl mx-auto space-y-6">
+            <div class="bg-white rounded-2xl p-8 border border-slate-200 card-shadow text-center space-y-6">
+                <div class="w-20 h-20 gold-gradient rounded-full mx-auto flex items-center justify-center text-white text-4xl shadow-xl">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-brand-navy font-quran">أحسنت! أتممت الاختبار بنجاح</h2>
+                    <p class="text-xs text-slate-500 mt-1">تم إضافتها لسجل نتاجاتك المربوط بذاكرة الجهاز</p>
+                </div>
+                <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 grid grid-cols-3 gap-4">
+                    <div>
+                        <span class="text-xs text-slate-500 block">الدرجة النهائية</span>
+                        <span id="result-score" class="text-2xl font-black text-amber-600">0 / 0</span>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-500 block">النسبة المئوية</span>
+                        <span id="result-percentage" class="text-2xl font-black text-brand-navy">0%</span>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-500 block">التقييم</span>
+                        <span id="result-grade" class="text-sm font-bold text-emerald-600 block mt-2">ممتاز</span>
+                    </div>
+                </div>
+                <div class="text-right space-y-3">
+                    <h4 class="font-bold text-slate-800 text-sm border-b pb-2">تفاصيل الإجابات والأخطاء:</h4>
+                    <div id="results-breakdown-list" class="space-y-3 max-h-80 overflow-y-auto custom-scrollbar pl-1"></div>
+                </div>
+                <div class="flex flex-wrap gap-3 justify-center pt-4">
+                    <button onclick="navigateTo('student-portal')" class="px-5 py-2.5 bg-brand-navy hover:bg-slate-800 text-white rounded-lg text-xs sm:text-sm font-bold transition">
+                        <i class="fa-solid fa-house ml-1"></i> العودة للقائمة الرئيسية
+                    </button>
+                    <button onclick="showStudentHistoryModal()" class="px-5 py-2.5 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs sm:text-sm font-bold transition">
+                        <i class="fa-solid fa-chart-line ml-1"></i> عرض كافة درجاتي
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: TEACHER DASHBOARD -->
+        <section id="page-teacher" class="hidden space-y-6">
+            <div class="bg-brand-navy text-white rounded-xl p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-lg border-b-4 border-amber-500">
+                <div>
+                    <span class="px-2.5 py-0.5 bg-amber-500/20 text-amber-300 text-xs rounded border border-amber-500/30 font-semibold">
+                        🔒 لوحة التحكم والإدارة
+                    </span>
+                    <h2 class="text-2xl font-bold font-quran text-amber-400 mt-1">مرحباً بالمعلم: <span id="admin-teacher-name">أستاذ</span></h2>
+                    <p class="text-xs text-slate-300">إدارة الاختبارات، التعديل، الحذف، والاطلاع على نتائج ومحاولات الطلاب</p>
+                </div>
+                <div class="flex items-center space-x-2 space-x-reverse">
+                    <button onclick="openQuizModal()" class="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-900 rounded-lg text-xs sm:text-sm font-bold shadow transition flex items-center">
+                        <i class="fa-solid fa-plus-circle ml-1.5"></i> إنشاء اختبار جديد
+                    </button>
+                    <button onclick="logoutTeacher()" class="px-3 py-2.5 bg-slate-800 hover:bg-red-900/50 text-slate-300 hover:text-red-300 rounded-lg text-xs font-semibold transition">
+                        <i class="fa-solid fa-right-from-bracket ml-1"></i> خروج
+                    </button>
+                </div>
+            </div>
+            <div class="flex border-b border-slate-200 bg-white rounded-t-xl px-4 pt-2">
+                <button id="tab-btn-quizzes" onclick="switchTeacherTab('quizzes')" class="px-4 py-3 font-bold text-xs sm:text-sm border-b-2 border-amber-500 text-amber-600 flex items-center">
+                    <i class="fa-solid fa-book-bookmark ml-2"></i> إدارة الاختبارات (<span id="teacher-quiz-count">0</span>)
+                </button>
+                <button id="tab-btn-students" onclick="switchTeacherTab('students')" class="px-4 py-3 font-bold text-xs sm:text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center">
+                    <i class="fa-solid fa-users ml-2"></i> سجل أداء الطلاب (<span id="teacher-student-count">0</span>)
+                </button>
+            </div>
+            <div id="teacher-tab-quizzes" class="space-y-4">
+                <div id="teacher-quizzes-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </div>
+            <div id="teacher-tab-students" class="hidden bg-white rounded-xl border border-slate-200 card-shadow overflow-hidden">
+                <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-800 text-sm">سجل المحاولات المكتملة للطلاب</h3>
+                    <button onclick="clearAllStudentRecords()" class="text-xs text-red-600 hover:text-red-800 font-semibold">
+                        <i class="fa-solid fa-trash ml-1"></i> مسح كافة السجلات
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right text-xs sm:text-sm">
+                        <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                            <tr>
+                                <th class="p-3">اسم الطالب</th>
+                                <th class="p-3">الاختبار</th>
+                                <th class="p-3">الدرجة</th>
+                                <th class="p-3">معرف الجهاز</th>
+                                <th class="p-3">التاريخ</th>
+                                <th class="p-3">الأخطاء</th>
+                            </tr>
+                        </thead>
+                        <tbody id="student-results-tbody" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-navy text-slate-400 text-xs py-6 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p class="font-quran text-base text-amber-400">منصة نَحْوِي لاختبارات النحو والصرف</p>
+            <p>جميع الحقوق محفوظة © <span id="current-year"></span> | إعداد وتطوير: <strong class="text-slate-200">كاتو ومصطفى الجوهري</strong></p>
+        </div>
+    </footer>
+
+    <!-- MODALS -->
+    <div id="modal-teacher-auth" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 card-shadow border border-slate-100 space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="font-extrabold text-brand-navy text-lg flex items-center">
+                    <i class="fa-solid fa-lock text-amber-500 ml-2"></i> دخول لوحة المعلم / Admin
+                </h3>
+                <button onclick="closeModal('modal-teacher-auth')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleTeacherLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">اسم المعلم</label>
+                    <input type="text" id="auth-teacher-name" required placeholder="أدخل اسمك المعلم..." class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">رمز المرور الخاص (Passcode)</label>
+                    <input type="password" id="auth-passcode" required placeholder="أدخل رمز المرور..." class="w-full px-3.5 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+                </div>
+                <button type="submit" class="w-full py-2.5 gold-gradient text-white rounded-lg font-bold text-sm shadow hover:opacity-95 transition">
+                    تسجيل الدخول
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-quiz-editor" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-3xl w-full p-6 card-shadow border border-slate-100 space-y-5 my-8 max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 id="quiz-editor-modal-title" class="font-extrabold text-brand-navy text-lg">إنشاء اختبار جديد</h3>
+                <button onclick="closeModal('modal-quiz-editor')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-4 overflow-y-auto custom-scrollbar flex-grow pl-1 pr-1">
+                <input type="hidden" id="editor-quiz-id">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">عنوان الاختبار</label>
+                        <input type="text" id="editor-quiz-title" placeholder="مثال: اختبار الفاعل" class="w-full px-3 py-2 border rounded-lg text-xs sm:text-sm outline-none focus:ring-2 focus:ring-amber-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">التصنيف الرئيسي</label>
+                        <select id="editor-quiz-category" class="w-full px-3 py-2 border rounded-lg text-xs sm:text-sm outline-none focus:ring-2 focus:ring-amber-500">
+                            <option value="النحو">النحو</option>
+                            <option value="الصرف">الصرف</option>
+                            <option value="شامل نحو وصرف">شامل نحو وصرف</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">وصف مقتضب للاختبار</label>
+                    <input type="text" id="editor-quiz-desc" placeholder="وصف الاختبار..." class="w-full px-3 py-2 border rounded-lg text-xs sm:text-sm outline-none focus:ring-2 focus:ring-amber-500">
+                </div>
+                <div class="border-t pt-4 flex justify-between items-center">
+                    <h4 class="font-bold text-slate-800 text-sm">أسئلة الاختبار</h4>
+                    <button type="button" onclick="addQuestionEditorBlock()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition">
+                        <i class="fa-solid fa-plus ml-1"></i> إضافة سؤال جديد
+                    </button>
+                </div>
+                <div id="editor-questions-container" class="space-y-6"></div>
+            </div>
+            <div class="border-t pt-3 flex justify-end space-x-2 space-x-reverse">
+                <button onclick="closeModal('modal-quiz-editor')" class="px-4 py-2 bg-slate-100 text-slate-600 rounded-lg text-xs font-semibold">إلغاء</button>
+                <button onclick="saveQuizFromEditor()" class="px-5 py-2 gold-gradient text-white rounded-lg text-xs font-bold shadow">حفظ الاختبار</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-student-history" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 card-shadow border border-slate-100 space-y-4 max-h-[85vh] flex flex-col">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="font-extrabold text-brand-navy text-lg flex items-center">
+                    <i class="fa-solid fa-clock-rotate-left text-amber-500 ml-2"></i> سجل درجات الطالب والأخطاء
+                </h3>
+                <button onclick="closeModal('modal-student-history')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div id="student-history-content" class="overflow-y-auto custom-scrollbar flex-grow space-y-4"></div>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-5 left-5 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl z-50 text-xs font-semibold hidden flex items-center space-x-2 space-x-reverse border border-slate-700">
+        <i id="toast-icon" class="fa-solid fa-circle-info text-amber-400"></i>
+        <span id="toast-message">رسالة التنبيه</span>
+    </div>
+
+    <!-- MAIN JAVASCRIPT APP LOGIC -->
+    <script>
+        // الاختبار الجديد المحدد من قبل المعلم
+        const DEFAULT_QUIZZES = [
+            {
+                id: "quiz-nahw-new-1",
+                title: "اختبار أحكام بناء وإعراب الفعل المضارع",
+                category: "شامل نحو وصرف",
+                description: "اختبار شامل حول بناء وإعراب الفعل المضارع، نون التوكيد، نون النسوة، وعلامات البناء المختلفة.",
+                createdBy: "كاتو ومصطفى الجوهري",
+                createdAt: "2026-10-23",
+                questions: [
+                    {
+                        id: "q1",
+                        questionText: "قال تعالى: (وَتَاللَّهِ لَأَكِيدَنَّ أَصْنَامَكُم بَعْدَ أَن تُوَلُّوا مُدْبِرِينَ). ميز علامة بناء (لأكيدن):",
+                        aiHint: "انظر إلى آخر الفعل المضارع المتصل بنون التوكيد المباشرة.",
+                        explanation: "الفعل المضارع يبنى على الفتح إذا اتصلت به نون التوكيد اتصالاً مباشراً.",
+                        options: [
+                            { text: "حذف النون", isCorrect: false },
+                            { text: "الفتح", isCorrect: true },
+                            { text: "الضم", isCorrect: false },
+                            { text: "السكون", isCorrect: false }
+                        ]
+                    },
+                    {
+                        id: "q2",
+                        questionText: "قال رسول الله -صلى الله عليه وسلم-: (والذي نفسي بيده لتأمُرُنَّ بالمعروفِ ولتنهَوُنَّ عن المنكرِ أو ليوشِكَنَّ اللهُ يبعثُ عليكم عذابًا منه ثمَّ تدعونه فلا يستجيبُ لكم). ميز علامة بناء الفعل المضارع الثالث (ليوشِكَنَّ):",
+                        aiHint: "لاحظ حركة الحرف الأخير قبل نون التوكيد.",
+                        explanation: "الفعل المضارع (ليوشِكَنَّ) مبني على الفتح لاتصاله بنون التوكيد.",
+                        options: [
+                            { text: "ثبوت النون", isCorrect: false },
+                            { text: "الضم", isCorrect: false },
+                            { text: "الفتح", isCorrect: true },
+                            { text: "السكون", isCorrect: false }
+                        ]
+                    },
+                    {
+                        id: "q3",
+                        questionText: "قال تعالى متحدثًا عن حق النساء في العفو عن جزء من المهر: (فَنِصْفُ مَا فَرَضْتُمْ إِلَّا أَن يَعْفُونَ أَوْ يَعْفُوَ الَّذِي بِيَدِهِ عُقْدَةُ النِّكَاحِ). ميز علامة بناء (يعفون):",
+                        aiHint: "هنا الفعل المضارع مسند إلى نون النسوة.",
+                        explanation: "الفعل المضارع إذا اتصلت به نون النسوة يبنى على السكون.",
+                        options: [
+                            { text: "الضم", isCorrect: false },
+                            { text: "الفتح", isCorrect: false },
+                            { text: "ثبوت النون", isCorrect: false },
+                            { text: "السكون", isCorrect: true }
+                        ]
+                    },
+                    {
+                        id: "q4",
+                        questionText: "قال الشاعر: ولا (تجعلنَّ) الحمد إلا لأهله / ولا تدع الإمساك بالعروة الوثقى. أعرب ما بين القوسين:",
+                        aiHint: "الفعل المضارع سبق بنهي واتصلت به نون التوكيد.",
+                        explanation: "مضارع مبني على الفتح لاتصاله بنون التوكيد في محل جزم.",
+                        options: [
+                            { text: "مضارع مرفوع بثبوت النون", isCorrect: false },
+                            { text: "مضارع مبني على الفتح", isCorrect: true },
+                            { text: "مضارع مبني على السكون", isCorrect: false },
+                            { text: "مضارع مجزوم بالسكون", isCorrect: false }
+                        ]
+                    },
+                    {
+                        id: "q5",
+                        questionText: "قال الشاعر: (لأستسهلنَّ) الصعب أو أدرك المنى / فما انقادت الآمال إلا لصابر. أعرب ما بين القوسين:",
+                        aiHint: "الفعل المضارع واقع في جواب القسم ومقترن بنون التوكيد.",
+                        explanation: "فعل مضارع مبني على الفتح لاتصاله بنون التوكيد.",
+                        options: [
+                            { text: "مضارع مجزوم بالسكون", isCorrect: false },
+                            { text: "مضارع مرفوع بالضمة المقدرة", isCorrect: false },
+                            { text: "مضارع مبني على الفتح", isCorrect: true },
+                            { text: "مضارع مبني على السكون", isCorrect: false }
+                        ]
+                    },
+                    {
+                        id: "q6",
+                        questionText: "قال أمير الشعراء في المرأة المصرية: الله أنبتهنَّ في طاعاته خير النبات / (يمشينَ) في سوق الثواب مساوماتٍ رابحات. أعرب ما بين القوسين:",
+                        aiHint: "الفعل هنا مسند إلى نون النسوة (يمشينَ).",
+                        explanation: "فعل مضارع مبني على السكون لاتصاله بنون النسوة.",
+                        options: [
+                            { text: "مضارع مرفوع بثبوت النون", isCorrect: false },
+                            { text: "مضارع مبني على السكون", isCorrect: true },
+                            { text: "مضارع مبني على الفتح", isCorrect: false },
+                            { text: "مضارع مرفوع بالضمة المقدرة", isCorrect: false }
+                        ]
+                    },
+                    {
+                        id: "q7",
+                        questionText: "قال تعالى: (وَقُل لِّلْمُؤْمِنَاتِ يَغْضُضْنَ مِنْ أَبْصَارِهِنَّ وَيَحْفَظْنَ فُرُوجَهُنَّ وَلَا (يُبْدِينَ) زِينَتَهُنَّ). ما بين القوسين مبني على:",
+                        aiHint: "الفعل (يبدين) مسند إلى نون النسوة.",
+                        explanation: "مبني على السكون لاتصاله بنون النسوة.",
+                        options: [
+                            { text: "الفتح؛ لاتصاله بنون التوكيد", isCorrect: false },
+                            { text: "الفتح؛ لاتصاله بنون النسوة", isCorrect: false },
+                            { text: "السكون؛ لاتصاله بنون النسوة", isCorrect: true },
+                            { text: "السكون؛ لأنه لم يتصل به ضمير رفع", isCorrect: false }
+                        ]
+                    },
+                    {
+                        id: "q8",
+                        questionText: "قال تعالى: (وَالْمُطَلَّقَاتُ (يَتَرَبَّصْنَ) بِأَنفُسِهِنَّ ثَلَاثَةَ قُرُوءٍ). إعراب الفعل بين القوسين:",
+                        aiHint: "الفعل المضارع اتصلت به نون النسوة.",
+                        explanation: "فعل مضارع مبني على السكون لاتصاله بنون النسوة.",
+                        options: [
+                            { text: "فعل مضارع مبني على السكون", isCorrect: true },
+                            { text: "فعل مضارع مبني على الفتح", isCorrect: false },
+                            { text: "فعل مضارع مجزوم بالسكون", isCorrect: false },
+                            { text: "فعل أمر مبني على السكون", isCorrect: false }
+                        ]
+                    },
+                    {
+                        id: "q9",
+                        questionText: "قال تعالى: (لَنُخْرِجَنَّكَ يَا شُعَيْبُ). نوع اللام في الآية السابقة:",
+                        aiHint: "اللام واقعة في جواب قسم محذوف.",
+                        explanation: "لام القسم.",
+                        options: [
+                            { text: "لام التعليل", isCorrect: false },
+                            { text: "لام الجحود", isCorrect: false },
+                            { text: "لام القسم", isCorrect: true },
+                            { text: "لام الأمر", isCorrect: false }
+                        ]
+                    },
+                    {
+                        id: "q10",
+                        questionText: "قال تعالى: (لَنُخْرِجَنَّكَ يَا شُعَيْبُ). نوع النون في الآية السابقة:",
+                        aiHint: "نون توكيد ثقيلة مشددة تؤكد الفعل.",
+                        explanation: "نون التوكيد الثقيلة.",
+                        options: [
+                            { text: "نون الوقاية", isCorrect: false },
+                            { text: "نون التوكيد الثقيلة", isCorrect: true },
+                            { text: "نون النسوة", isCorrect: false },
+                            { text: "نون التوكيد الخفيفة", isCorrect: false }
+                        ]
+                    },
+                    {
+                        id: "q11",
+                        questionText: "في قوله تعالى: (إلا أن يَعْفُونَ) الفعل المضارع:",
+                        aiHint: "الفعل هنا معرب أم مبني؟ لاحظ واو الجماعة أو نون النسوة.",
+                        explanation: "مبني على السكون لاتصاله بنون النسوة.",
+                        options: [
+                            { text: "معرب", isCorrect: false },
+                            { text: "مبني على السكون", isCorrect: true },
+                            { text: "مبني على الفتح", isCorrect: false }
+                        ]
+                    },
+                    {
+                        id: "q12",
+                        questionText: "في قوله تعالى: (ثم لتسألن يومئذ عن النعيم) .... الفعل المضارع:",
+                        aiHint: "هل اتصلت به نون توكيد مباشرة؟",
+                        explanation: "معرب (أو مبني لاتصاله بنون التوكيد حسب الإعراب التفصيلي، وهنا يعتبر مبنياً أو معرباً حسب الخيارات المتاحة للطلاب).",
+                        options: [
+                            { text: "معرب", isCorrect: false },
+                            { text: "مبني", isCorrect: true },
+                            { text: "مجزوم", isCorrect: false },
+                            { text: "منصوب", isCorrect: false }
+                        ]
+                    },
+                    {
+                        id: "q13",
+                        questionText: "يبني الفعل المضارع على ...... مع نون التوكيد المباشرة، وعلى ...... مع نون الإناث.",
+                        aiHint: "تذكر قاعدتي البناء للمضارع مع النونين.",
+                        explanation: "يبنى على الفتح مع نون التوكيد، وعلى السكون مع نون النسوة (الإناث).",
+                        options: [
+                            { text: "الفتح، الفتح", isCorrect: false },
+                            { text: "السكون، السكون", isCorrect: false },
+                            { text: "الفتح، السكون", isCorrect: true },
+                            { text: "السكون، الفتح", isCorrect: false }
+                        ]
+                    },
+                    {
+                        id: "q14",
+                        questionText: "مرفوع وعلامة رفعه ثبوت النون .......",
+                        aiHint: "من الأفعال الخمسة.",
+                        explanation: "يقومان (من الأفعال الخمسة مرفوع بثبوت النون).",
+                        options: [
+                            { text: "الولدان", isCorrect: false },
+                            { text: "يقومان", isCorrect: true },
+                            { text: "مسروران", isCorrect: false },
+                            { text: "محمدان", isCorrect: false },
+                            { text: "الأول والرابع", isCorrect: false }
+                        ]
+                    },
+                    {
+                        id: "q15",
+                        questionText: "الفعلان المضارعان في قوله تعالى: (لَتُبْلَوُنَّ في أموالكم وأنفسكم ولَتَسْمَعُنَّ من الذين أوتوا الكتاب من قبلكم) معربان لعدم مباشرة نون التوكيد، والفاصل في ..... الأول ..... وفي الثاني:",
+                        aiHint: "لاحظ الضمائر المحذوفة للتخفيف أو التقاء الساكين.",
+                        explanation: "مقدّر، مقدّر",
+                        options: [
+                            { text: "مباشر، مباشر", isCorrect: false },
+                            { text: "مقدّر، مقدّر", isCorrect: true },
+                            { text: "مباشر، مقدّر", isCorrect: false },
+                            { text: "مقدّر، مباشر", isCorrect: false }
+                        ]
+                    },
+                    {
+                        id: "q16",
+                        questionText: "الفعل المضارع (تَتَّبِعَانَّ) في قوله تعالى: (ولا تَتَّبِعَانَّ سبيل الذين لا يعلمون)",
+                        aiHint: "لاحظ اتصال الفعل بألف الاثنين ونون التوكيد.",
+                        explanation: "معرب (لأنه من الأفعال الخمسة واتصلت به نون التوكيد غير المباشرة أو بحسب الحالة النحوية).",
+                        options: [
+                            { text: "معرب", isCorrect: true },
+                            { text: "مبني على السكون", isCorrect: false },
+                            { text: "مبني على الفتح", isCorrect: false }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        let quizzes = [];
+        let studentResults = [];
+        let currentStudent = { name: "زائر جديد", deviceId: "" };
+        let activeQuiz = null;
+        let currentQuestionIndex = 0;
+        let userAnswersLog = [];
+        let teacherSession = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const yrEl = document.getElementById('current-year');
+            if (yrEl) yrEl.textContent = new Date().getFullYear();
+            
+            initStudentIdentity();
+            loadAppData();
+            checkUrlForSharedExam();
+        });
+
+        function initStudentIdentity() {
+            let deviceId = localStorage.getItem('nahwi_device_id');
+            if (!deviceId) {
+                deviceId = 'DEV-' + Math.random().toString(36).substring(2, 9).toUpperCase();
+                localStorage.setItem('nahwi_device_id', deviceId);
+            }
+            currentStudent.deviceId = deviceId;
+            const devEl = document.getElementById('display-device-id');
+            if (devEl) devEl.textContent = deviceId;
+
+            const savedName = localStorage.getItem('nahwi_student_name');
+            if (savedName) {
+                currentStudent.name = savedName;
+            } else {
+                currentStudent.name = "طالب " + deviceId.substring(4, 8);
+                localStorage.setItem('nahwi_student_name', currentStudent.name);
+            }
+            const nameEl = document.getElementById('display-student-name');
+            if (nameEl) nameEl.textContent = currentStudent.name;
+        }
+
+        function promptChangeStudentName() {
+            const newName = prompt("أدخل اسمك الكريم للاختبارات:", currentStudent.name);
+            if (newName && newName.trim() !== "") {
+                currentStudent.name = newName.trim();
+                localStorage.setItem('nahwi_student_name', currentStudent.name);
+                const nameEl = document.getElementById('display-student-name');
+                if (nameEl) nameEl.textContent = currentStudent.name;
+                showToast("تم تحديث اسم الطالب بنجاح", "success");
+            }
+        }
+
+        function loadAppData() {
+            // تحديث الاختبارات فوراً بالقالب الجديد وحذف القديمة نهائياً
+            quizzes = DEFAULT_QUIZZES;
+            localStorage.setItem('nahwi_quizzes', JSON.stringify(quizzes));
+
+            const savedResults = localStorage.getItem('nahwi_student_results');
+            if (savedResults) {
+                try {
+                    studentResults = JSON.parse(savedResults);
+                } catch (e) {
+                    studentResults = [];
+                }
+            }
+            renderPublicQuizzes();
+        }
+
+        function saveAppData() {
+            localStorage.setItem('nahwi_quizzes', JSON.stringify(quizzes));
+            localStorage.setItem('nahwi_student_results', JSON.stringify(studentResults));
+        }
+
+        function checkUrlForSharedExam() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const encodedExam = urlParams.get('examData');
+                if (encodedExam) {
+                    const jsonString = decodeURIComponent(atob(encodedExam));
+                    const sharedQuiz = JSON.parse(jsonString);
+                    
+                    if (sharedQuiz && sharedQuiz.id) {
+                        const exists = quizzes.some(q => q.id === sharedQuiz.id);
+                        if (!exists) {
+                            quizzes.unshift(sharedQuiz);
+                            saveAppData();
+                        }
+                        setTimeout(() => {
+                            startQuiz(sharedQuiz.id);
+                        }, 300);
+                    }
+                }
+            } catch (err) {
+                console.error("خطأ آمن في قراءة الرابط:", err);
+            }
+        }
+
+        function generateShareableLink(quizId) {
+            const quiz = quizzes.find(q => q.id === quizId);
+            if (!quiz) return "";
+            try {
+                const jsonString = JSON.stringify(quiz);
+                const encodedData = btoa(encodeURIComponent(jsonString));
+                const cleanOrigin = window.location.origin + window.location.pathname;
+                return `${cleanOrigin}?examData=${encodedData}`;
+            } catch (err) {
+                return "";
+            }
+        }
+
+        function navigateTo(pageId) {
+            ['page-home', 'page-quiz', 'page-result', 'page-teacher'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+
+            const target = document.getElementById('page-' + pageId);
+            if (target) {
+                target.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            if (pageId === 'home') {
+                renderPublicQuizzes();
+            } else if (pageId === 'teacher') {
+                if (!teacherSession) {
+                    navigateTo('home');
+                    openTeacherAuthModal();
+                } else {
+                    renderTeacherDashboard();
+                }
+            }
+        }
+
+        function renderPublicQuizzes() {
+            const grid = document.getElementById('public-quiz-grid');
+            const badge = document.getElementById('quiz-count-badge');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+            if (badge) badge.textContent = `${quizzes.length} اختبارات`;
+
+            if (quizzes.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 text-sm">لا توجد اختبارات متاحـة حالياً.</div>`;
+                return;
+            }
+
+            quizzes.forEach(quiz => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-xl p-6 border border-slate-200 card-shadow hover:border-amber-400 transition flex flex-col justify-between space-y-4";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="px-2.5 py-1 bg-amber-50 text-amber-800 rounded text-xs font-bold">${quiz.category || 'نحو وصرف'}</span>
+                            <span class="text-xs text-slate-400">${quiz.questions.length} سؤال</span>
+                        </div>
+                        <h4 class="font-bold text-brand-navy text-base font-quran">${quiz.title}</h4>
+                        <p class="text-xs text-slate-500 mt-1 line-clamp-2">${quiz.description || 'اختبار تفاعلي لقياس المهارات النحوية.'}</p>
+                    </div>
+                    <div class="border-t pt-4 flex items-center justify-between">
+                        <span class="text-xs text-slate-400">إعداد: ${quiz.createdBy || 'كاتو ومصطفى الجوهري'}</span>
+                        <button onclick="startQuiz('${quiz.id}')" class="px-4 py-2 gold-gradient text-white rounded-lg text-xs font-bold shadow hover:opacity-95 transition">
+                            ابدأ الاختبار <i class="fa-solid fa-arrow-left mr-1"></i>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function startQuiz(quizId) {
+            const quiz = quizzes.find(q => q.id === quizId);
+            if (!quiz || !quiz.questions || quiz.questions.length === 0) {
+                showToast("عذراً، هذا الاختبار فارغ أو غير موجود", "error");
+                return;
+            }
+            activeQuiz = quiz;
+            currentQuestionIndex = 0;
+            userAnswersLog = [];
+
+            navigateTo('quiz');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (!activeQuiz) return;
+            const q = activeQuiz.questions[currentQuestionIndex];
+            const total = activeQuiz.questions.length;
+
+            document.getElementById('active-quiz-title').textContent = activeQuiz.title;
+            document.getElementById('active-quiz-desc').textContent = activeQuiz.description;
+            document.getElementById('quiz-progress-text').textContent = `${currentQuestionIndex + 1} / ${total}`;
+            
+            const pct = ((currentQuestionIndex + 1) / total) * 100;
+            document.getElementById('quiz-progress-bar').style.width = `${pct}%`;
+
+            document.getElementById('question-category').textContent = activeQuiz.category;
+            document.getElementById('question-text').textContent = q.questionText;
+
+            // إخفاء التلميح والنتيجة المؤقتة
+            const hintBox = document.getElementById('ai-hint-box');
+            hintBox.classList.add('hidden');
+            document.getElementById('ai-hint-content').textContent = q.aiHint || "لا يوجد تلميح متاح لهذا السؤال.";
+
+            const feedbackPanel = document.getElementById('feedback-panel');
+            feedbackPanel.classList.add('hidden');
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-right px-4 py-3 bg-slate-50 hover:bg-amber-50/50 border border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 transition flex items-center justify-between group";
+                btn.innerHTML = `
+                    <span><span class="inline-block w-6 h-6 rounded-full bg-slate-200 group-hover:bg-amber-200 text-slate-600 text-center text-xs leading-6 ml-3 font-bold">${String.fromCharCode(1571 + idx)}</span> ${opt.text}</span>
+                    <i class="fa-solid fa-chevron-left text-slate-300 group-hover:text-amber-600 text-xs"></i>
+                `;
+                btn.onclick = () => selectAnswer(idx);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function toggleAIHint() {
+            const hintBox = document.getElementById('ai-hint-box');
+            hintBox.classList.toggle('hidden');
+        }
+
+        function selectAnswer(optionIndex) {
+            const q = activeQuiz.questions[currentQuestionIndex];
+            const selectedOpt = q.options[optionIndex];
+            const isCorrect = selectedOpt.isCorrect;
+
+            userAnswersLog.push({
+                questionText: q.questionText,
+                selectedAnswer: selectedOpt.text,
+                correctAnswer: q.options.find(o => o.isCorrect).text,
+                isCorrect: isCorrect,
+                explanation: q.explanation
+            });
+
+            // تعطيل الأزرار بعد الاختيار
+            const buttons = document.querySelectorAll('#options-container button');
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (q.options[idx].isCorrect) {
+                    btn.classList.remove('bg-slate-50', 'hover:bg-amber-50/50');
+                    btn.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-900');
+                } else if (idx === optionIndex && !isCorrect) {
+                    btn.classList.remove('bg-slate-50', 'hover:bg-amber-50/50');
+                    btn.classList.add('bg-red-50', 'border-red-500', 'text-red-900');
+                }
+            });
+
+            // إظهار لوحة التغذية الراجعة
+            const feedbackPanel = document.getElementById('feedback-panel');
+            const feedbackStatus = document.getElementById('feedback-status');
+            const feedbackExp = document.getElementById('feedback-explanation');
+
+            feedbackPanel.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-200', 'bg-red-50', 'border-red-200');
+            if (isCorrect) {
+                feedbackPanel.classList.add('bg-emerald-50', 'border-emerald-200');
+                feedbackStatus.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 ml-2 text-base"></i> إجابة صحيحة أحييت بها النحو!`;
+            } else {
+                feedbackPanel.classList.add('bg-red-50', 'border-red-200');
+                feedbackStatus.innerHTML = `<i class="fa-solid fa-circle-xmark text-red-600 ml-2 text-base"></i> إجابة خاطئة. راجع القاعدة النحوية أدناه:`;
+            }
+            feedbackExp.textContent = q.explanation;
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < activeQuiz.questions.length) {
+                loadQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            navigateTo('result');
+            const correctCount = userAnswersLog.filter(a => a.isCorrect).length;
+            const total = activeQuiz.questions.length;
+            const percentage = Math.round((correctCount / total) * 100);
+
+            document.getElementById('result-score').textContent = `${correctCount} / ${total}`;
+            document.getElementById('result-percentage').textContent = `${percentage}%`;
+
+            let gradeText = "ممتاز";
+            let gradeColor = "text-emerald-600";
+            if (percentage < 50) {
+                gradeText = "يحتاج إلى مراجعة";
+                gradeColor = "text-red-600";
+            } else if (percentage < 75) {
+                gradeText = "جيد جداً";
+                gradeColor = "text-amber-600";
+            }
+            const gradeEl = document.getElementById('result-grade');
+            gradeEl.textContent = gradeText;
+            gradeEl.className = `text-sm font-bold ${gradeColor} block mt-2`;
+
+            // عرض تفاصيل النتائج
+            const breakdownList = document.getElementById('results-breakdown-list');
+            breakdownList.innerHTML = '';
+            userAnswersLog.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = `p-3 rounded-lg border text-xs space-y-1 ${item.isCorrect ? 'bg-emerald-50/50 border-emerald-200' : 'bg-red-50/50 border-red-200'}`;
+                div.innerHTML = `
+                    <div class="font-bold text-slate-800">س${idx+1}: ${item.questionText}</div>
+                    <div class="flex flex-wrap gap-2 text-slate-600">
+                        <span>إجابتك: <strong class="${item.isCorrect ? 'text-emerald-700' : 'text-red-700'}">${item.selectedAnswer}</strong></span>
+                        ${!item.isCorrect ? `<span>| الإجابة الصحيحة: <strong class="text-emerald-700">${item.correctAnswer}</strong></span>` : ''}
+                    </div>
+                    <div class="text-slate-500 text-[11px] pt-1 border-t border-slate-200/60">الشرح: ${item.explanation}</div>
+                `;
+                breakdownList.appendChild(div);
+            });
+
+            // حفظ النتيجة في سجل الطالب
+            const resultRecord = {
+                studentName: currentStudent.name,
+                deviceId: currentStudent.deviceId,
+                quizTitle: activeQuiz.title,
+                score: `${correctCount} / ${total}`,
+                percentage: percentage,
+                date: new Date().toLocaleDateString('ar-EG'),
+                errorsCount: total - correctCount
+            };
+            studentResults.unshift(resultRecord);
+            saveAppData();
+        }
+
+        function confirmExitQuiz() {
+            if (confirm("هل أنت متأكد من رغبتك في الخروج؟ ستفقد تقدمك في هذا الاختبار.")) {
+                navigateTo('home');
+            }
+        }
+
+        // لوحة المعلم المصغرة
+        function openTeacherAuthModal() {
+            document.getElementById('modal-teacher-auth').classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function handleTeacherLogin(e) {
+            e.preventDefault();
+            const name = document.getElementById('auth-teacher-name').value.trim();
+            const pass = document.getElementById('auth-passcode').value.trim();
+
+            // باسورد الدخول الافتراضي للمعلم أو كاتو ومصطفى
+            if (pass === "1234" || pass === "nahwi2026" || name.includes("كاتو") || name.includes("مصطفى")) {
+                teacherSession = name;
+                closeModal('modal-teacher-auth');
+                document.getElementById('admin-teacher-name').textContent = name;
+                navigateTo('teacher');
+                showToast("مرحباً بك في لوحة المعلم", "success");
+            } else {
+                showToast("رمز المرور غير صحيح", "error");
+            }
+        }
+
+        function logoutTeacher() {
+            teacherSession = null;
+            navigateTo('home');
+            showToast("تم تسجيل خروج المعلم بنجاح", "info");
+        }
+
+        function switchTeacherTab(tab) {
+            const btnQuizzes = document.getElementById('tab-btn-quizzes');
+            const btnStudents = document.getElementById('tab-btn-students');
+            const tabQuizzes = document.getElementById('teacher-tab-quizzes');
+            const tabStudents = document.getElementById('teacher-tab-students');
+
+            if (tab === 'quizzes') {
+                btnQuizzes.className = "px-4 py-3 font-bold text-xs sm:text-sm border-b-2 border-amber-500 text-amber-600 flex items-center";
+                btnStudents.className = "px-4 py-3 font-bold text-xs sm:text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center";
+                tabQuizzes.classList.remove('hidden');
+                tabStudents.classList.add('hidden');
+                renderTeacherQuizzesList();
+            } else {
+                btnStudents.className = "px-4 py-3 font-bold text-xs sm:text-sm border-b-2 border-amber-500 text-amber-600 flex items-center";
+                btnQuizzes.className = "px-4 py-3 font-bold text-xs sm:text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center";
+                tabStudents.classList.remove('hidden');
+                tabQuizzes.classList.add('hidden');
+                renderTeacherStudentsTable();
+            }
+        }
+
+        function renderTeacherDashboard() {
+            document.getElementById('teacher-quiz-count').textContent = quizzes.length;
+            document.getElementById('teacher-student-count').textContent = studentResults.length;
+            renderTeacherQuizzesList();
+            renderTeacherStudentsTable();
+        }
+
+        function renderTeacherQuizzesList() {
+            const list = document.getElementById('teacher-quizzes-list');
+            list.innerHTML = '';
+
+            quizzes.forEach(quiz => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-xl p-5 border border-slate-200 card-shadow space-y-3";
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="px-2 py-0.5 bg-amber-50 text-amber-800 text-[10px] font-bold rounded">${quiz.category}</span>
+                            <h4 class="font-bold text-slate-800 text-sm font-quran mt-1">${quiz.title}</h4>
+                        </div>
+                        <span class="text-xs text-slate-400 font-mono">${quiz.questions.length} س</span>
+                    </div>
+                    <p class="text-xs text-slate-500 line-clamp-1">${quiz.description || ''}</p>
+                    <div class="border-t pt-3 flex flex-wrap gap-2 justify-between items-center text-xs">
+                        <button onclick="openQuizModalForEdit('${quiz.id}')" class="text-amber-600 hover:underline font-semibold"><i class="fa-solid fa-pen ml-1"></i> تعديل</button>
+                        <button onclick="shareQuizLink('${quiz.id}')" class="text-emerald-600 hover:underline font-semibold"><i class="fa-solid fa-share-nodes ml-1"></i> مشاركة</button>
+                        <button onclick="deleteQuiz('${quiz.id}')" class="text-red-600 hover:underline font-semibold"><i class="fa-solid fa-trash ml-1"></i> حذف</button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function renderTeacherStudentsTable() {
+            const tbody = document.getElementById('student-results-tbody');
+            tbody.innerHTML = '';
+            document.getElementById('teacher-student-count').textContent = studentResults.length;
+
+            if (studentResults.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">لا توجد محاولات مسجلة للطلاب حتى الآن.</td></tr>`;
+                return;
+            }
+
+            studentResults.forEach(res => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 border-b border-slate-100";
+                tr.innerHTML = `
+                    <td class="p-3 font-bold text-slate-800">${res.studentName}</td>
+                    <td class="p-3 text-slate-600">${res.quizTitle}</td>
+                    <td class="p-3 font-extrabold text-amber-600">${res.score} (${res.percentage}%)</td>
+                    <td class="p-3 font-mono text-slate-500">${res.deviceId}</td>
+                    <td class="p-3 text-slate-500">${res.date}</td>
+                    <td class="p-3 text-red-600 font-bold">${res.errorsCount} أخطاء</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function deleteQuiz(quizId) {
+            if (confirm("هل أنت متأكد من حذف هذا الاختبار نهائياً؟")) {
+                quizzes = quizzes.filter(q => q.id !== quizId);
+                saveAppData();
+                renderTeacherDashboard();
+                showToast("تم حذف الاختبار بنجاح", "success");
+            }
+        }
+
+        function shareQuizLink(quizId) {
+            const link = generateShareableLink(quizId);
+            if (!link) {
+                showToast("تعذر إنشاء رابط المشاركة", "error");
+                return;
+            }
+            prompt("انسخ رابط الاختبار المباشر لمشاركته مع الطلاب:", link);
+            showToast("تم توليد رابط الاختبار بنجاح", "success");
+        }
+
+        function showStudentHistoryModal() {
+            const modal = document.getElementById('modal-student-history');
+            const content = document.getElementById('student-history-content');
+            modal.classList.remove('hidden');
+
+            const myResults = studentResults.filter(r => r.deviceId === currentStudent.deviceId);
+            content.innerHTML = '';
+
+            if (myResults.length === 0) {
+                content.innerHTML = `<div class="text-center py-8 text-slate-400 text-xs">لم تقم بإتمام أي اختبارات بعد بهذا الجهاز (${currentStudent.deviceId}).</div>`;
+                return;
+            }
+
+            myResults.forEach(res => {
+                const div = document.createElement('div');
+                div.className = "p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-1 text-xs";
+                div.innerHTML = `
+                    <div class="flex justify-between items-center font-bold text-slate-800">
+                        <span>${res.quizTitle}</span>
+                        <span class="text-amber-600">${res.score} (${res.percentage}%)</span>
+                    </div>
+                    <div class="text-slate-500 flex justify-between">
+                        <span>التاريخ: ${res.date}</span>
+                        <span class="text-red-500 font-semibold">الأخطاء: ${res.errorsCount}</span>
+                    </div>
+                `;
+                content.appendChild(div);
+            });
+        }
+
+        function clearAllStudentRecords() {
+            if (confirm("هل أنت متأكد من مسح كافة سجلات أداء الطلاب؟")) {
+                studentResults = [];
+                saveAppData();
+                renderTeacherStudentsTable();
+                showToast("تم مسح كافة سجلات الطلاب بنجاح", "success");
+            }
+        }
+
+        function openQuizModal() {
+            document.getElementById('quiz-editor-modal-title').textContent = "إنشاء اختبار جديد";
+            document.getElementById('editor-quiz-id').value = '';
+            document.getElementById('editor-quiz-title').value = '';
+            document.getElementById('editor-quiz-desc').value = '';
+            document.getElementById('editor-questions-container').innerHTML = '';
+            addQuestionEditorBlock();
+            document.getElementById('modal-quiz-editor').classList.remove('hidden');
+        }
+
+        function openQuizModalForEdit(quizId) {
+            const quiz = quizzes.find(q => q.id === quizId);
+            if (!quiz) return;
+
+            document.getElementById('quiz-editor-modal-title').textContent = "تعديل الاختبار";
+            document.getElementById('editor-quiz-id').value = quiz.id;
+            document.getElementById('editor-quiz-title').value = quiz.title;
+            document.getElementById('editor-quiz-category').value = quiz.category;
+            document.getElementById('editor-quiz-desc').value = quiz.description || '';
+
+            const container = document.getElementById('editor-questions-container');
+            container.innerHTML = '';
+
+            quiz.questions.forEach((q, idx) => {
+                addQuestionEditorBlock(q, idx);
+            });
+
+            document.getElementById('modal-quiz-editor').classList.remove('hidden');
+        }
+
+        function addQuestionEditorBlock(qData = null, index = null) {
+            const container = document.getElementById('editor-questions-container');
+            const qId = qData ? qData.id : 'q_' + Math.random().toString(36).substring(2, 7);
+            const block = document.createElement('div');
+            block.className = "p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3 question-editor-block";
+            block.dataset.qid = qId;
+
+            block.innerHTML = `
+                <div class="flex justify-between items-center">
+                    <span class="font-bold text-slate-700 text-xs">السؤال</span>
+                    <button type="button" onclick="this.closest('.question-editor-block').remove()" class="text-red-500 hover:text-red-700 text-xs"><i class="fa-solid fa-trash"></i> حذف السؤال</button>
+                </div>
+                <div>
+                    <input type="text" placeholder="نص السؤال..." class="q-text-input w-full px-3 py-2 border rounded-lg text-xs outline-none" value="${qData ? qData.questionText : ''}">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <input type="text" placeholder="تلميح الذكاء الاصطناعي (AI Hint)..." class="q-hint-input w-full px-3 py-2 border rounded-lg text-xs outline-none bg-amber-50/40" value="${qData ? (qData.aiHint || '') : ''}">
+                    <input type="text" placeholder="شرح الإجابة المفصل..." class="q-exp-input w-full px-3 py-2 border rounded-lg text-xs outline-none bg-emerald-50/40" value="${qData ? (qData.explanation || '') : ''}">
+                </div>
+                <div class="space-y-2 pt-2 border-t border-slate-200">
+                    <span class="text-[11px] font-bold text-slate-500 block">الخيارات (اختر الإجابة الصحيحة):</span>
+                    <div class="space-y-2 options-block">
+                        ${[0, 1, 2, 3].map(i => {
+                            const opt = qData && qData.options && qData.options[i] ? qData.options[i] : { text: '', isCorrect: i === 0 };
+                            return `
+                                <div class="flex items-center space-x-2 space-x-reverse option-row">
+                                    <input type="radio" name="correct_${qId}" class="correct-radio accent-amber-600" ${opt.isCorrect ? 'checked' : ''}>
+                                    <input type="text" placeholder="الخيار ${i+1}" class="opt-text-input flex-grow px-3 py-1.5 border rounded-lg text-xs outline-none" value="${opt.text}">
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+            container.appendChild(block);
+        }
+
+        function saveQuizFromEditor() {
+            const quizId = document.getElementById('editor-quiz-id').value || ('quiz-' + Math.random().toString(36).substring(2, 8));
+            const title = document.getElementById('editor-quiz-title').value.trim();
+            const category = document.getElementById('editor-quiz-category').value;
+            const description = document.getElementById('editor-quiz-desc').value.trim();
+
+            if (!title) {
+                showToast("يرجى إدخال عنوان الاختبار", "error");
+                return;
+            }
+
+            const qBlocks = document.querySelectorAll('.question-editor-block');
+            if (qBlocks.length === 0) {
+                showToast("يجب إضافة سؤال واحد على الأقل", "error");
+                return;
+            }
+
+            const questions = [];
+            let isValid = true;
+
+            qBlocks.forEach((block, idx) => {
+                const qText = block.querySelector('.q-text-input').value.trim();
+                const aiHint = block.querySelector('.q-hint-input').value.trim();
+                const explanation = block.querySelector('.q-exp-input').value.trim();
+
+                if (!qText) {
+                    isValid = false;
+                }
+
+                const optRows = block.querySelectorAll('.option-row');
+                const options = [];
+                optRows.forEach(row => {
+                    const optText = row.querySelector('.opt-text-input').value.trim();
+                    const isCorrect = row.querySelector('.correct-radio').checked;
+                    if (optText) {
+                        options.push({ text: optText, isCorrect: isCorrect });
+                    }
+                });
+
+                if (options.length < 2) {
+                    isValid = false;
+                }
+
+                questions.push({
+                    id: 'q_' + (idx + 1),
+                    questionText: qText,
+                    aiHint: aiHint,
+                    explanation: explanation,
+                    options: options
+                });
+            });
+
+            if (!isValid) {
+                showToast("تأكد من إكمال نصوص الأسئلة وخيارين صالحين على الأقل لكل سؤال", "error");
+                return;
+            }
+
+            const newQuizObj = {
+                id: quizId,
+                title: title,
+                category: category,
+                description: description,
+                createdBy: teacherSession || "كاتو ومصطفى الجوهري",
+                createdAt: new Date().toISOString().split('T')[0],
+                questions: questions
+            };
+
+            const existingIndex = quizzes.findIndex(q => q.id === quizId);
+            if (existingIndex >= 0) {
+                quizzes[existingIndex] = newQuizObj;
+            } else {
+                quizzes.unshift(newQuizObj);
+            }
+
+            saveAppData();
+            closeModal('modal-quiz-editor');
+            renderTeacherDashboard();
+            showToast("تم حفظ الاختبار بنجاح", "success");
+        }
+
+        function showToast(message, type = "info") {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-message');
+            const iconEl = document.getElementById('toast-icon');
+
+            msgEl.textContent = message;
+            toast.classList.remove('hidden');
+
+            if (type === "success") {
+                iconEl.className = "fa-solid fa-circle-check text-emerald-400";
+            } else if (type === "error") {
+                iconEl.className = "fa-solid fa-circle-exclamation text-red-400";
+            } else {
+                iconEl.className = "fa-solid fa-circle-info text-amber-400";
+            }
+
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
